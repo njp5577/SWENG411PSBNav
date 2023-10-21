@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">LoginPageAssignment</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="landingText">Home Page</string>
+    <string name="signup">Sign Up</string>
+    <string name="forgot">Forgot Password?</string>
+    <string name="register">Sign Up</string>
+    <string name="Email">Email</string>
+    <string name="Name">Name</string>
+    <string name="newPassword">New Password</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="resetPassword">Reset</string>
+    <string name="backToLogin">Back to Login</string>
+</resources>
