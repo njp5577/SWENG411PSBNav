@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -18,16 +19,11 @@ data class User (
     var username: String,
     var password: String
 )
-//List containing users
+
 @Serializable
-var userList = arrayListOf(
-    User(
-        name = "admin",
-        email = "email@email.com",
-        username = "admin",
-        password = "admin"
-    )
-    )
+data class CurrentUser (
+    var username: String
+)
 
 class SignIn : AppCompatActivity() {
 
@@ -41,11 +37,6 @@ class SignIn : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //Show the login page
         setContentView(R.layout.activity_login)
-        //Get userList from other activity if it is available
-        var newUserList = intent.getStringExtra("User List")
-        if (newUserList != null){
-            userList = Json.decodeFromString(newUserList.toString())
-        }
         //Get info from text inputs and buttons
         editTextUsername = findViewById(R.id.editTextUsername)
         editTextPassword = findViewById(R.id.editTextPassword)
@@ -53,19 +44,21 @@ class SignIn : AppCompatActivity() {
         buttonSignUp = findViewById(R.id.buttonSignUp)
         buttonReset = findViewById(R.id.buttonForgot)
 
+        var firestore: FirebaseFirestore;
+
+        firestore = FirebaseFirestore.getInstance()
+
+        var userRef = firestore.collection("Users")
+
         //When user wants to reset password
         buttonReset.setOnClickListener {
             val go = Intent(this, ResetPassword::class.java)
-            val json = Json.encodeToString(userList)
-            go.putExtra("User List", json)
             startActivity(go)
         }
 
         //When user wants to sign up
         buttonSignUp.setOnClickListener {
             val go = Intent(this, SignUp::class.java)
-            val json = Json.encodeToString(userList)
-            go.putExtra("User List", json)
             startActivity(go)
         }
 
@@ -76,25 +69,26 @@ class SignIn : AppCompatActivity() {
             val password = editTextPassword.text.toString()
             var notFound = 1
 
-            for (user in userList) {
-                if (user.username == username && user.password == password) {
-                    // Login successful
-                    val go = Intent(this, Homepage::class.java)
-                    val json = Json.encodeToString(user)
-                    val jsonTwo = Json.encodeToString(userList)
-                    go.putExtra("User", json)
-                    go.putExtra("User List", jsonTwo)
-                    startActivity(go)
+            userRef.whereEqualTo("username", username).whereEqualTo("password", password).get().addOnSuccessListener{ documents ->
+                //Check that account does not already exist
+                if ((documents.isEmpty)) {
+                    Toast.makeText(this, "Invalid username or password.", Toast.LENGTH_SHORT).show()
                     notFound = 0
-                    break
                 }
-                else {
-                    notFound = 1
+
+                //Create account if there are no issues
+                if(notFound == 1) {
+
+                    // Go to login screen
+                    val go = Intent(this, Homepage::class.java)
+
+                    val json = Json.encodeToString(CurrentUser(username))
+
+                    go.putExtra("User", json)
+
+                    startActivity(go)
+
                 }
-            }
-            //If login fails, tell user
-            if (notFound == 1){
-                Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
             }
         }
     }

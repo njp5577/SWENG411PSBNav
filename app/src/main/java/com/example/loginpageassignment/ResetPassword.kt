@@ -6,8 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ResetPassword : AppCompatActivity() {
 
@@ -22,8 +21,11 @@ class ResetPassword : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset)
 
-        var userList = intent.getStringExtra("User List")
-        var userL = Json.decodeFromString<ArrayList<User>>(userList.toString())
+        var firestore: FirebaseFirestore;
+
+        firestore = FirebaseFirestore.getInstance()
+
+        var userRef = firestore.collection("Users")
 
         editTextUsername = findViewById(R.id.editTextUsername)
         editTextPassword = findViewById(R.id.editTextPassword)
@@ -34,8 +36,6 @@ class ResetPassword : AppCompatActivity() {
         //If user wants to go back to sign in page
         buttonBackLogin.setOnClickListener {
             val go = Intent(this, SignIn::class.java)
-            val json = Json.encodeToString(userL)
-            go.putExtra("User List", json)
             startActivity(go)
         }
         //If user wants to reset password
@@ -47,29 +47,31 @@ class ResetPassword : AppCompatActivity() {
             val iconfirm = editTextConfirmPassword.text.toString()
             var match = 0
             //Check all users to look for a match
-            for (user in userL) {
-                if (user.username == iusername && user.email == iemail) {
-                    match = 1
-                    //If a match is found and new password is long enough, reset password
-                    if (ipassword == iconfirm && ipassword.length > 3){
-                        user.password = ipassword
+            // Validate the username and password
 
-                        Toast.makeText(this, "Password has been reset.", Toast.LENGTH_SHORT).show()
-
-                        val go = Intent(this, SignIn::class.java)
-                        val json = Json.encodeToString(userL)
-                        go.putExtra("User List", json)
-
-                        startActivity(go)
-                    }
-                    else{
-                        Toast.makeText(this, "The confirmation password does not match or the password is less than 4 characters.", Toast.LENGTH_SHORT).show()
-                    }
+            userRef.whereEqualTo("username", iusername).whereEqualTo("email", iemail).get().addOnSuccessListener{ documents ->
+                //Check that account does not already exist
+                if ((documents.isEmpty)) {
+                    Toast.makeText(this, "Invalid username or email.", Toast.LENGTH_SHORT).show()
+                    match = 0
                 }
-            }
+                else{
+                    match = 1
+                }
 
-            if (match == 0){
-                Toast.makeText(this, "No matching user found", Toast.LENGTH_SHORT).show()
+                //Create account if there are no issues
+                if(match == 1) {
+                    if (ipassword == iconfirm && ipassword.length > 3){
+                        documents.documents[0].reference.update("password", ipassword).addOnSuccessListener {
+                            Toast.makeText(this, "Password has been reset.", Toast.LENGTH_SHORT).show()
+                            // Go to login screen
+                            val go = Intent(this, SignIn::class.java)
+
+                            startActivity(go)
+                        }
+                    }
+
+                }
             }
         }
     }
