@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/landingText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal= "true"
+        android:gravity="center"
         android:layout_marginTop="60dp"
-        android:text="@string/landingText" />
+        android:text="@string/landingText"
+        app:srcCompat="@mipmap/ic_launcher_round"/>
+
+    <Button
+        android:id="@+id/buttonChange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/landingText"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Change" />
 
     <WebView
         android:id="@+id/googlemap_webView"
