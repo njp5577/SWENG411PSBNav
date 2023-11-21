@@ -1,21 +1,44 @@
-package com.example.loginpageassignment
+package com.example.loginpageassignment.appscreens
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.example.loginpageassignment.R
+import com.example.loginpageassignment.dataobjects.User
+import com.example.loginpageassignment.parentpageclasses.LoggedOutPage
 import com.google.firebase.firestore.FirebaseFirestore
 
-class SignUp : AppCompatActivity() {
+class SignUp : LoggedOutPage() {
 
-    private lateinit var editTextUsername: EditText
-    private lateinit var editTextPassword: EditText
     private lateinit var editTextEmail: EditText
     private lateinit var editTextName: EditText
     private lateinit var buttonRegister: Button
-    private lateinit var buttonBackLogin: Button
+
+    private fun getEditTextEmailFun() : EditText{
+        return this.editTextEmail
+    }
+
+    private fun setEditTextEmailFun(editTextEmail: EditText){
+        this.editTextEmail = editTextEmail
+    }
+
+    private fun setEditTextNameFun(editTextName: EditText){
+        this.editTextName = editTextName
+    }
+
+    private fun getEditTextNameFun() : EditText{
+        return this.editTextName
+    }
+
+    private fun getButtonRegisterFun(): Button{
+        return this.buttonRegister
+    }
+
+    private fun setButtonRegisterFun(buttonRegister: Button){
+        this.buttonRegister = buttonRegister
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,24 +50,25 @@ class SignUp : AppCompatActivity() {
 
         var userRef = firestore.collection("Users")
 
-        editTextUsername = findViewById(R.id.editTextUsername)
-        editTextPassword = findViewById(R.id.editTextPassword)
-        editTextEmail = findViewById(R.id.editTextEmail)
-        editTextName = findViewById(R.id.editTextName)
-        buttonRegister = findViewById(R.id.buttonRegister)
-        buttonBackLogin = findViewById(R.id.buttonBackLogin)
+        setEditTextUsernameFun(findViewById(R.id.editTextUsername))
+        setEditTextPasswordFun(findViewById(R.id.editTextPassword))
+        setEditTextEmailFun(findViewById(R.id.editTextEmail))
+        setEditTextNameFun(findViewById(R.id.editTextName))
+        setButtonRegisterFun(findViewById(R.id.buttonRegister))
+        setButtonLoginFun(findViewById(R.id.buttonLogin))
         //When user wants to go back to sign in page
-        buttonBackLogin.setOnClickListener {
+        getButtonLoginFun().setOnClickListener {
             val go = Intent(this, SignIn::class.java)
             startActivity(go)
         }
         //When user wants to sign up
-        buttonRegister.setOnClickListener {
+        getButtonRegisterFun().setOnClickListener {
             // Validate the username and password
-            val iusername = editTextUsername.text.toString()
-            val ipassword = editTextPassword.text.toString()
-            val iemail = editTextEmail.text.toString()
-            val iname = editTextName.text.toString()
+            val iusername = getEditTextUsernameFun().text.toString()
+            val ipassword = getEditTextPasswordFun().text.toString()
+            val iemail = getEditTextEmailFun().text.toString()
+            val iname = getEditTextNameFun().text.toString()
+            val type = "User"
             var inUse = 0
 
             //Check that user is inputting appropriate number of characters for each field
@@ -75,7 +99,7 @@ class SignUp : AppCompatActivity() {
 
                     //Create account if there are no issues
                     if(inUse == 0) {
-                        userRef.add(User(iname, iemail, iusername, ipassword)).addOnSuccessListener {
+                        userRef.add(User(iname, iemail, iusername, ipassword, type)).addOnSuccessListener {
                             // Go to login screen
                             val go = Intent(this, SignIn::class.java)
 

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
         <!--tools:targetApi="31">-->
-        <activity android:name=".SignIn" android:exported="true">
+        <activity android:name=".appscreens.SignIn" android:exported="true">
 		
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,9 +20,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUp"></activity>
-        <activity android:name=".Homepage"></activity>
-        <activity android:name=".ResetPassword"></activity>
+        <activity android:name=".appscreens.SignUp"></activity>
+        <activity android:name=".appscreens.Homepage"></activity>
+        <activity android:name=".appscreens.ResetPassword"></activity>
+        <activity android:name=".appscreens.DestinationQueue"></activity>
+        <activity android:name=".appscreens.EventPage"></activity>
+        <activity android:name=".appscreens.MapPage"></activity>
+
+
+
+        <activity android:name=".appscreens.AdminHome"></activity>
+        <activity android:name=".appscreens.AdminLocAdd"></activity>
+        <activity android:name=".appscreens.AdminLocDelete"></activity>
+        <activity android:name=".appscreens.AdminUserDelete"></activity>
+        <activity android:name=".appscreens.AdminAddAdmin"></activity>
+        <activity android:name=".appscreens.AdminAddEventOrg"></activity>
+
     </application>
 
 </manifest>

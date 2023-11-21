@@ -83,7 +83,7 @@
         android:text="@string/resetPassword" />
 
     <Button
-        android:id="@+id/buttonBackLogin"
+        android:id="@+id/buttonLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonReset"

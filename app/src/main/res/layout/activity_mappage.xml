@@ -13,35 +13,21 @@
         android:layout_centerHorizontal= "true"
         android:gravity="center"
         android:layout_marginTop="60dp"
-        android:text="@string/landingText"
+        android:text="Map Page"
         app:srcCompat="@mipmap/ic_launcher_round"/>
 
     <Button
-        android:id="@+id/buttonMapPage"
+        android:id="@+id/buttonChange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/landingText"
         android:gravity="center"
         android:layout_marginTop="20dp"
-        android:text="Map Page" />
+        android:text="Change" />
 
-    <Button
-        android:id="@+id/buttonDestinationQueue"
+    <WebView
+        android:id="@+id/googlemap_webView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttonMapPage"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Destination Queue" />
-
-    <Button
-        android:id="@+id/buttonEventPage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttonDestinationQueue"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Event Page" />
-
-
+        android:layout_height="match_parent"
+        android:layout_margin="10dp" />
 </LinearLayout>

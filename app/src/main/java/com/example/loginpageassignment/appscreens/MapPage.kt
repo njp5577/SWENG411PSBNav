@@ -1,35 +1,40 @@
-package com.example.loginpageassignment
-
+package com.example.loginpageassignment.appscreens
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.widget.Button
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.example.loginpageassignment.R
+import com.example.loginpageassignment.dataobjects.CurrentUser
+import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
 import kotlinx.serialization.json.Json
 
-
-class Homepage : AppCompatActivity() {
+class MapPage : LoggedInPageAdmin() {
 
     private lateinit var googleMapWebView: WebView
     private lateinit var buttonChange: Button
 
+    private fun getButtonChangeFun() : Button {
+        return this.buttonChange
+    }
+
+    private fun setButtonChangeFun(buttonChange: Button){
+        this.buttonChange = buttonChange
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_mappage)
 
-        buttonChange = findViewById(R.id.buttonChange)
+        setButtonChangeFun(findViewById(R.id.buttonChange))
 
         initializeMap(42.119320, -79.987709, 42.116818, -79.976435)
 
         var userLogin = intent.getStringExtra("User")
-        var user = Json.decodeFromString<CurrentUser>(userLogin.toString()).username
-
-
-        Toast.makeText(this, "Hello $user!", Toast.LENGTH_SHORT).show()
+        var user = Json.decodeFromString<CurrentUser>(userLogin.toString())
+        setLoggedInAsFun(user)
 
         //When user wants to sign up
-        buttonChange.setOnClickListener {
+        getButtonChangeFun().setOnClickListener {
             initializeMap(42.119320, -79.987709, 42.119201, -79.980339)
         }
     }

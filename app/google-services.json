@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "358724399492",
+    "project_id": "sweng411-d8d1d",
+    "storage_bucket": "sweng411-d8d1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358724399492:android:28d46505b058c31c6aedd1",
+        "android_client_info": {
+          "package_name": "com.example.loginpageassignment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABa8NlrChiOPwANZ3m4Ye60g2vlqfcRFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

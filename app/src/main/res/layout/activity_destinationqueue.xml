@@ -13,35 +13,25 @@
         android:layout_centerHorizontal= "true"
         android:gravity="center"
         android:layout_marginTop="60dp"
-        android:text="@string/landingText"
+        android:text="Destination Queue"
         app:srcCompat="@mipmap/ic_launcher_round"/>
 
     <Button
-        android:id="@+id/buttonMapPage"
+        android:id="@+id/buttonAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/landingText"
         android:gravity="center"
         android:layout_marginTop="20dp"
-        android:text="Map Page" />
+        android:text="Button to add List to DB" />
 
     <Button
-        android:id="@+id/buttonDestinationQueue"
+        android:id="@+id/buttonRetrieve"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonMapPage"
+        android:layout_below="@id/buttonAdd"
         android:gravity="center"
         android:layout_marginTop="20dp"
-        android:text="Destination Queue" />
-
-    <Button
-        android:id="@+id/buttonEventPage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttonDestinationQueue"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Event Page" />
-
+        android:text="Button to retrieve first List from DB" />
 
 </LinearLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LoginPageAssignment</string>
+    <string name="app_name">PSB Navigator</string>
     <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -13,4 +13,7 @@
     <string name="confirmPassword">Confirm Password</string>
     <string name="resetPassword">Reset</string>
     <string name="backToLogin">Back to Login</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="description">Description</string>
 </resources>
