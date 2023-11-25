@@ -24,7 +24,7 @@ class EventPage : LoggedInPage() {
     private val eventRef = FirebaseFirestore.getInstance().collection("Events")
     private val events = mutableListOf<PSB_Event>()
 
-    private var limit = 10 // Initial limit
+    private var limit = 5 // Initial limit
     private var loading = false
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -115,6 +115,9 @@ class EventPage : LoggedInPage() {
                 newPSBEvents.add(event)
             }
 
+            // Sort the events by date and time
+            newPSBEvents.sortWith(compareBy({ it.eventDate }, { it.eventTime }))
+
             loading = false
             updateAdapterData(newPSBEvents)
         }.addOnFailureListener{
@@ -125,7 +128,7 @@ class EventPage : LoggedInPage() {
 
     private fun loadMoreData()
     {
-        limit += 10
+        limit += 5
         loadData()
     }
 
