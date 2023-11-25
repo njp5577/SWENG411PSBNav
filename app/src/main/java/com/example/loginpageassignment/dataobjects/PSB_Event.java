@@ -1,3 +1,4 @@
+//PSB_Event.java
 package com.example.loginpageassignment.dataobjects;
 import com.google.firebase.firestore.PropertyName;
 
@@ -18,6 +19,16 @@ public class PSB_Event
     @PropertyName("Date")
     private String eventDate;
 
+    @SuppressWarnings("unused")
+    public PSB_Event()
+    {
+        eventName = "Sample Event Name";
+        eventLocation= "Sample Event Location";
+        eventTime = "Sample Event Time";
+        eventDate = "Sample Event Date";
+    }
+
+    @SuppressWarnings("unused")
     public PSB_Event(String n, String l, String t, String d)
     {
         eventName = n;
@@ -31,6 +42,7 @@ public class PSB_Event
         return this.eventName;
     }
 
+    @SuppressWarnings("unused") //remove when used
     @PropertyName("Name")
     public void setEventName(String name) {
         this.eventName = name;
@@ -41,6 +53,7 @@ public class PSB_Event
         return this.eventLocation;
     }
 
+    @SuppressWarnings("unused") //remove when used
     @PropertyName("Location")
     public void setEventLocation(String eventLocation) {
         this.eventLocation = eventLocation;
@@ -51,6 +64,7 @@ public class PSB_Event
         return this.eventTime;
     }
 
+    @SuppressWarnings("unused") //remove when used
     @PropertyName("Time")
     public void setEventTime(String eventTime) {
         this.eventTime = eventTime;
@@ -61,6 +75,7 @@ public class PSB_Event
         return this.eventDate;
     }
 
+    @SuppressWarnings("unused") //remove when used
     @PropertyName("Date")
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
