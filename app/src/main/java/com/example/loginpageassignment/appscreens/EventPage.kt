@@ -1,6 +1,8 @@
+//EventPage.kt
 package com.example.loginpageassignment.appscreens
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -22,10 +24,12 @@ class EventPage : LoggedInPage() {
     private val eventRef = FirebaseFirestore.getInstance().collection("Events")
     private val events = mutableListOf<PSB_Event>()
 
-    private var limit = 10 // Initial limit
+    private var limit = 5 // Initial limit
     private var loading = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
+        Log.d("EventPage", "Entry")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
 
@@ -63,8 +67,9 @@ class EventPage : LoggedInPage() {
         }
 
         recyclerView.adapter = adapter
-
         loadData()
+
+        Log.d("EventPage", "Events size: ${events.size}")
 
         // Set up scroll listener
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -102,24 +107,28 @@ class EventPage : LoggedInPage() {
     {
         loading = true
         eventRef.limit(limit.toLong()).get().addOnSuccessListener{ documents ->
-
+            Log.d("EventPage", "Document count: ${documents.size()}")
+            val newPSBEvents = mutableListOf<PSB_Event>()
             for (document in documents)
             {
                 val event = document.toObject(PSB_Event::class.java)
-                events.add(event)
+                newPSBEvents.add(event)
             }
 
+            // Sort the events by date and time
+            newPSBEvents.sortWith(compareBy({ it.eventDate }, { it.eventTime }))
+
             loading = false
-            updateAdapterData(events)
-        }
-        .addOnFailureListener{
+            updateAdapterData(newPSBEvents)
+        }.addOnFailureListener{
             loading = false
+            Log.e("EventPage", "Error loading data: $it")
         }
     }
 
     private fun loadMoreData()
     {
-        limit += 10
+        limit += 5
         loadData()
     }
 
