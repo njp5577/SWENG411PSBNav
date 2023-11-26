@@ -19,6 +19,9 @@ public class PSB_Event
     @PropertyName("Date")
     private String eventDate;
 
+    @PropertyName("Description")
+    private String eventDescription;
+
     @SuppressWarnings("unused")
     public PSB_Event()
     {
@@ -26,58 +29,81 @@ public class PSB_Event
         eventLocation= "Sample Event Location";
         eventTime = "Sample Event Time";
         eventDate = "Sample Event Date";
+        eventDescription = "Sample Event Description";
     }
 
     @SuppressWarnings("unused")
-    public PSB_Event(String n, String l, String t, String d)
+    public PSB_Event(String n, String l, String t, String da, String de)
     {
         eventName = n;
         eventLocation = l;
         eventTime = t;
-        eventDate = d;
+        eventDate = da;
+        eventDescription = de;
     }
 
     @PropertyName("Name")
-    public String getEventName() {
+    public String getEventName()
+    {
         return this.eventName;
     }
 
     @SuppressWarnings("unused") //remove when used
     @PropertyName("Name")
-    public void setEventName(String name) {
+    public void setEventName(String name)
+    {
         this.eventName = name;
     }
 
     @PropertyName("Location")
-    public String getEventLocation() {
+    public String getEventLocation()
+    {
         return this.eventLocation;
     }
 
     @SuppressWarnings("unused") //remove when used
     @PropertyName("Location")
-    public void setEventLocation(String eventLocation) {
+    public void setEventLocation(String eventLocation)
+    {
         this.eventLocation = eventLocation;
     }
 
     @PropertyName("Time")
-    public String getEventTime() {
+    public String getEventTime()
+    {
         return this.eventTime;
     }
 
     @SuppressWarnings("unused") //remove when used
     @PropertyName("Time")
-    public void setEventTime(String eventTime) {
+    public void setEventTime(String eventTime)
+    {
         this.eventTime = eventTime;
     }
 
     @PropertyName("Date")
-    public String getEventDate() {
+    public String getEventDate()
+    {
         return this.eventDate;
     }
 
     @SuppressWarnings("unused") //remove when used
     @PropertyName("Date")
-    public void setEventDate(String eventDate) {
+    public void setEventDate(String eventDate)
+    {
         this.eventDate = eventDate;
+    }
+
+    @PropertyName("Description")
+    public String getEventDescription()
+    {
+        return eventDescription;
+    }
+
+    @SuppressWarnings("unused") //remove when used
+    @PropertyName("Description")
+    public void setEventDescription(String eventDescription)
+    {
+        this.eventDescription = eventDescription;
     }
 }
