@@ -46,6 +46,5 @@
         android:layout_width="142dp"
         android:layout_height="120dp"
         android:layout_gravity="end"
-        android:scaleType="centerCrop"
-        android:src="" />
+        android:scaleType="centerCrop" />
 </androidx.cardview.widget.CardView>
