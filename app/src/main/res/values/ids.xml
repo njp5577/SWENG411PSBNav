@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="popupEventName" type="id" />
+    <item name="popupEventDate" type="id" />
+    <item name="popupEventLocation" type="id" />
+    <item name="popupViewOnMapButton" type="id" />
+    <item name="popupAddToQueueButton" type="id" />
+    <item name="popupCloseButton" type="id" />
+</resources>

@@ -13,6 +13,7 @@ import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPage
 import com.example.loginpageassignment.dataobjects.PSB_Event
+import com.example.loginpageassignment.utilities.popup.EventsPopup
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.serialization.json.Json
 
@@ -21,8 +22,10 @@ class EventPage : LoggedInPage() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
 
+
     private val eventRef = FirebaseFirestore.getInstance().collection("Events")
     private val events = mutableListOf<PSB_Event>()
+    private val eventsPopup = EventsPopup(this)
 
     private var limit = 5 // Initial limit
     private var loading = false
@@ -101,6 +104,8 @@ class EventPage : LoggedInPage() {
         eventCard.findViewById<TextView>(R.id.locationTextView).text = event.eventLocation
         eventCard.findViewById<TextView>(R.id.nameTextView).text = event.eventName
         eventCard.findViewById<TextView>(R.id.timeTextView).text = event.eventTime
+
+        eventCard.setOnClickListener{eventsPopup.showDetails(event, this.getLoggedInAsFun())}
     }
 
     private fun loadData()
