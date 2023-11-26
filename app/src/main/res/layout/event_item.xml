@@ -9,35 +9,43 @@
     android:layout_margin="5dp"
     card_view:cardCornerRadius="5dp"
     card_view:cardElevation="5dp">
-
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/nameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/event_name" />
-
-        <TextView
-            android:id="@+id/timeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/event_time" />
-
-        <TextView
-            android:id="@+id/locationTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/event_location" />
-
-        <TextView
-            android:id="@+id/dateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/event_date" />
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_name" />
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_time" />
+            <TextView
+                android:id="@+id/locationTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_location" />
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_date" />
+        </LinearLayout>
     </LinearLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="142dp"
+        android:layout_height="120dp"
+        android:layout_gravity="end"
+        android:scaleType="centerCrop"
+        android:src="" />
 </androidx.cardview.widget.CardView>
