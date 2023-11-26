@@ -24,6 +24,7 @@ class EventsPopup(private val context: Context) : DetailsPopup()
         val eventTimeTextView = dialogView.findViewById<TextView>(R.id.popupEventTime)
         val eventDateTextView = dialogView.findViewById<TextView>(R.id.popupEventDate)
         val eventLocationTextView = dialogView.findViewById<TextView>(R.id.popupEventLocation)
+        val eventDescriptionTextView = dialogView.findViewById<TextView>(R.id.popupEventDescription)
         val viewOnMapButton = dialogView.findViewById<Button>(R.id.popupViewOnMapButton)
         val addToQueueButton = dialogView.findViewById<Button>(R.id.popupAddToQueueButton)
         val backButton = dialogView.findViewById<Button>(R.id.popupCloseButton)
@@ -33,6 +34,7 @@ class EventsPopup(private val context: Context) : DetailsPopup()
         eventTimeTextView.text = event.eventTime
         eventDateTextView.text = event.eventDate
         eventLocationTextView.text = event.eventLocation
+        eventDescriptionTextView.text = event.eventDescription
 
         // Button actions
         viewOnMapButton.setOnClickListener {
