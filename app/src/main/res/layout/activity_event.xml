@@ -16,13 +16,13 @@
         app:srcCompat="@mipmap/ic_launcher_round"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/eventRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:layout_below="@id/eventPage"
         android:clipToPadding="false"
         android:paddingBottom="16dp"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent"/>
 
 </RelativeLayout>

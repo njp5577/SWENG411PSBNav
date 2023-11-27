@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- activity_destinationqueue.xml -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    tools:context=".appscreens.DestinationQueue">
 
     <TextView
         android:id="@+id/landingText"
@@ -12,26 +13,56 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal= "true"
         android:gravity="center"
-        android:layout_marginTop="60dp"
-        android:text="Destination Queue"
+        android:layout_marginTop="6dp"
+        android:text="@string/destination_queue"
         app:srcCompat="@mipmap/ic_launcher_round"/>
 
-    <Button
-        android:id="@+id/buttonAdd"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/destQueueRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/landingText"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Button to add List to DB" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:background="@android:color/transparent"
+        android:layout_below="@id/landingText"/>
 
-    <Button
-        android:id="@+id/buttonRetrieve"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttonAdd"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Button to retrieve first List from DB" />
+</RelativeLayout>
 
-</LinearLayout>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:orientation="vertical"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:padding="16dp">-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/landingText"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_centerHorizontal= "true"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginTop="60dp"-->
+<!--        android:text="Destination Queue"-->
+<!--        app:srcCompat="@mipmap/ic_launcher_round"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/buttonAdd"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/landingText"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:text="Button to add List to DB" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/buttonRetrieve"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/buttonAdd"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:text="Button to retrieve first List from DB" />-->
+
+<!--</LinearLayout>-->
