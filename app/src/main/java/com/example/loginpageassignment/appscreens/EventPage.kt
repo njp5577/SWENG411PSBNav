@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -37,7 +38,7 @@ class EventPage : LoggedInPage()
         setLoggedInAsFun(user)
 
         // Initialize RecyclerView
-        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView = findViewById(R.id.eventRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // Adapter with CardView items
