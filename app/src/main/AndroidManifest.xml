@@ -27,7 +27,7 @@
         <activity android:name=".appscreens.EventPage"></activity>
         <activity android:name=".appscreens.MapPage"></activity>
 
-
+        <activity android:name=".appscreens.EventOrgManageEvents"></activity>
 
         <activity android:name=".appscreens.AdminHome"></activity>
         <activity android:name=".appscreens.AdminLocAdd"></activity>

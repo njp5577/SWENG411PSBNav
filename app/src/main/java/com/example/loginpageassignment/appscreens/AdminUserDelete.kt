@@ -41,11 +41,11 @@ class AdminUserDelete : LoggedInPageAdmin() {
         val iemail = editTextEmail.text.toString()
 
         //Check all users to look for a match
-        userRef.whereEqualTo("email", iemail).whereNotEqualTo("type", "Admin").get().addOnSuccessListener{ documents ->
+        userRef.whereEqualTo("email", iemail).get().addOnSuccessListener{ documents ->
             //Check if incorrect credentials
             if (documents.isEmpty)
             {
-                Toast.makeText(this, "No account under that email or they are an admin.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No account under that email.", Toast.LENGTH_SHORT).show()
             }
             else
             {
