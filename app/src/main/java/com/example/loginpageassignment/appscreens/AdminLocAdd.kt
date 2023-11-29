@@ -79,7 +79,7 @@ class AdminLocAdd : LoggedInPageAdmin() {
         setLoggedInAsFun(user)
 
         buttonAddLoc.setOnClickListener {
-            // Validate the username and password
+
             val iname = getEditTextNameFun().text.toString()
             val ilat = getEditTextLatitudeFun().text.toString()
             val ilong = getEditTextLongitudeFun().text.toString()

@@ -12,6 +12,10 @@ import kotlinx.serialization.json.Json
 class AdminHome : LoggedInPageAdmin() {
 
     private lateinit var buttonAddLoc: Button
+    private lateinit var buttonDeleteLoc: Button
+    private lateinit var buttonAddAdmin: Button
+    private lateinit var buttonAddEventOrg: Button
+    private lateinit var buttonDeleteAccount: Button
 
     private fun getButtonAddLocFun() : Button{
         return this.buttonAddLoc
@@ -27,6 +31,10 @@ class AdminHome : LoggedInPageAdmin() {
 
         setButtonAddLocFun(findViewById(R.id.buttonAddLoc))
         setButtonBackFun(findViewById(R.id.buttonBack))
+        buttonDeleteLoc = findViewById(R.id.buttonDeleteLoc)
+        buttonAddAdmin = findViewById(R.id.buttonAddAdmin)
+        buttonAddEventOrg = findViewById(R.id.buttonAddEventOrg)
+        buttonDeleteAccount = findViewById(R.id.buttonDeleteAccount)
 
         var userLogin = intent.getStringExtra("User")
         var user = Json.decodeFromString<CurrentUser>(userLogin.toString())
@@ -36,6 +44,46 @@ class AdminHome : LoggedInPageAdmin() {
 
         getButtonAddLocFun().setOnClickListener {
             val go = Intent(this, AdminLocAdd::class.java)
+
+            val json = Json.encodeToString(getLoggedInAsFun())
+
+            go.putExtra("User", json)
+
+            startActivity(go)
+        }
+
+        buttonDeleteLoc.setOnClickListener {
+            val go = Intent(this, AdminLocDelete::class.java)
+
+            val json = Json.encodeToString(getLoggedInAsFun())
+
+            go.putExtra("User", json)
+
+            startActivity(go)
+        }
+
+        buttonAddAdmin.setOnClickListener {
+            val go = Intent(this, AdminAddAdmin::class.java)
+
+            val json = Json.encodeToString(getLoggedInAsFun())
+
+            go.putExtra("User", json)
+
+            startActivity(go)
+        }
+
+        buttonAddEventOrg.setOnClickListener {
+            val go = Intent(this, AdminAddEventOrg::class.java)
+
+            val json = Json.encodeToString(getLoggedInAsFun())
+
+            go.putExtra("User", json)
+
+            startActivity(go)
+        }
+
+        buttonDeleteAccount.setOnClickListener {
+            val go = Intent(this, AdminUserDelete::class.java)
 
             val json = Json.encodeToString(getLoggedInAsFun())
 

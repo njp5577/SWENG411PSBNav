@@ -13,8 +13,34 @@
         android:layout_centerHorizontal= "true"
         android:gravity="center"
         android:layout_marginTop="60dp"
-        android:text="Delete Location"
+        android:text="Delete Location by Name"
         app:srcCompat="@mipmap/ic_launcher_round"/>
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/landingText"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="@string/Name" />
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewName"
+        android:hint="@string/Name" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextName"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Delete Location" />
 
 
 

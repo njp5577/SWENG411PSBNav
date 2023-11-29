@@ -43,5 +43,14 @@
         android:layout_marginTop="20dp"
         android:text="Event Page" />
 
+    <Button
+        android:id="@+id/buttonManageEvents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonEventPage"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Manage Events" />
+
 
 </LinearLayout>

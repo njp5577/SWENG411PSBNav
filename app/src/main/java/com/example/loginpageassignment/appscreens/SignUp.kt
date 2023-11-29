@@ -129,7 +129,14 @@ class SignUp : LoggedOutPage()
         // Check if the email is already associated with an account
         userRef.whereEqualTo("email", iemail).get().addOnSuccessListener { documents ->
             if (documents.isEmpty)
-                createUserAccount(iemail, iusername, ipassword, iname, type)
+                userRef.whereEqualTo("username", iname).get().addOnSuccessListener { documentsTwo ->
+                    if(documentsTwo.isEmpty){
+                        createUserAccount(iemail, iusername, ipassword, iname, type)
+                    }
+                    else{
+                        Toast.makeText(this, "An account is already under that username.", Toast.LENGTH_SHORT).show()
+                    }
+                }
             else
                 Toast.makeText(this, "An account is already under that email.", Toast.LENGTH_SHORT).show()
         }
