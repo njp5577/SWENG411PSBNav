@@ -13,8 +13,35 @@
         android:layout_centerHorizontal= "true"
         android:gravity="center"
         android:layout_marginTop="60dp"
-        android:text="User Delete"
+        android:text="Delete User by Email"
         app:srcCompat="@mipmap/ic_launcher_round"/>
+
+    <TextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/landingText"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="@string/Email" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewEmail"
+        android:hint="@string/Email" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextEmail"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Delete User" />
+
 
 
 
