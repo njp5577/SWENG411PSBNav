@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -14,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.Location
+import com.example.loginpageassignment.dataobjects.PSB_Event
 import com.example.loginpageassignment.parentpageclasses.LoggedInPage
+import com.example.loginpageassignment.utilities.popup.AddToQueuePopup
+import com.example.loginpageassignment.utilities.queue.QueueManager
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -27,9 +31,7 @@ data class DestQueue(var user: String, var list: MutableList<Location>)
 
 /*
 TODO:
-    Add locations to tester (tester, password) user's queue and test view
     Add default text for when no locations in queue
-    Add to queue button functionality
     Remove from queue button functionality
     move up/down button functionality
     test scroll capabilities
@@ -39,24 +41,32 @@ class DestinationQueue : LoggedInPage()
 {
     private lateinit var recyclerView: RecyclerView
     private lateinit var destQueueAdapter: DestQueueAdapter
+    private lateinit var addToQueueButton: Button
+    private var addToQueuePopup = AddToQueuePopup(this)
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destinationqueue)
 
-        recyclerView = findViewById(R.id.destQueueRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        destQueueAdapter = DestQueueAdapter()
-        recyclerView.adapter = destQueueAdapter
-
         val userLogin = intent.getStringExtra("User")
         val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
+        recyclerView = findViewById(R.id.destQueueRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        destQueueAdapter = DestQueueAdapter(getLoggedInAsFun().username)
+        recyclerView.adapter = destQueueAdapter
+
         val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
         val queueRef = firestore.collection("Queues")
+
+        addToQueueButton = findViewById(R.id.addToQueueButton)
+        addToQueueButton.setOnClickListener {
+            //open popup
+            addToQueuePopup.showDetails(PSB_Event(), getLoggedInAsFun())
+        }
 
         queueRef.get().addOnSuccessListener { documents ->
             if (documents.isEmpty)
@@ -68,41 +78,59 @@ class DestinationQueue : LoggedInPage()
             {
                 val destQueueList = mutableListOf<DestQueue>()
 
-                //find user's queue
+                // Find user's queue
                 for (document in documents)
                 {
-                    if (document.getString("username") == getLoggedInAsFun().username)
+                    if (document.getString("user") == getLoggedInAsFun().username)
                     {
-                        val destQueue = document.toObject(DestQueue::class.java)
+                        val list = mutableListOf<Location>()
+
+                        val rawList = document["list"] as ArrayList<HashMap<String, Any>>?
+
+                        rawList?.forEach { locationMap ->
+                            val name = locationMap["name"] as String
+                            val latitude = locationMap["latitude"] as Double
+                            val longitude = locationMap["longitude"] as Double
+                            val desc = locationMap["desc"] as String
+
+                            val location = Location(name, latitude, longitude, desc)
+                            list.add(location)
+                        }
+
+                        val destQueue = DestQueue(getLoggedInAsFun().username, list)
                         destQueueList.add(destQueue)
                         break
                     }
                 }
 
-                if(destQueueList.isNotEmpty())
+                if (destQueueList.isNotEmpty())
                 {
                     if (destQueueList[0].list.isNotEmpty())
+                    {
                         destQueueAdapter.setData(destQueueList[0].list)
+                    }
                     else
+                    {
                         Toast.makeText(this, "No destinations in queue", Toast.LENGTH_SHORT).show()
-                }
-                else
-                {
+                    }
+                } else {
                     Log.d("DestQueuePage", "Error retrieving queue")
                 }
             }
         }.addOnFailureListener{
             // Handle the failure to retrieve data from the database
-            Log.e("DestQueuePage", "Error loading data: $it")
+            Log.d("DestQueuePage", "Error loading data: $it")
         }
     }
 
     // Adapter to bind data to RecyclerView
-    class DestQueueAdapter : RecyclerView.Adapter<DestQueueAdapter.ViewHolder>()
+    class DestQueueAdapter(username : String) :
+        RecyclerView.Adapter<DestQueueAdapter.ViewHolder>()
     {
         private var destQueueList = mutableListOf<Location>()
+        private val queueManager = QueueManager.getQueueManager(username)
         @SuppressLint("NotifyDataSetChanged")
-        fun setData(data: List<Location>)
+        fun setData(data: MutableList<Location>)
         {
             destQueueList.clear()
             destQueueList.addAll(data)
@@ -124,7 +152,7 @@ class DestinationQueue : LoggedInPage()
             {
                 val destinationCard = holder.itemView.findViewById<CardView>(R.id.destCard)
                 val destData = getItem(position, destQueueList)
-                holder.bind(destData, destinationCard)
+                if (queueManager != null) holder.bind(destData, destinationCard, queueManager)
             }
         }
 
@@ -140,12 +168,28 @@ class DestinationQueue : LoggedInPage()
         }
 
 
-        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+        class ViewHolder(itemView: View) :
+            RecyclerView.ViewHolder(itemView)
         {
             // Bind data to views in the ViewHolder
-            fun bind(destData: Location, destCard : CardView)
+            fun bind(destData: Location, destCard : CardView, queueManager: QueueManager)
             {
                 destCard.findViewById<TextView>(R.id.nameTextView).text = destData.name
+
+//                destCard.findViewById<Button>(R.id.removeButton).setOnClickListener {
+//                    //grab location from card and pass to function
+//                    //queueManager.removeFromQueue()
+//                }
+//
+//                destCard.findViewById<Button>(R.id.upButton).setOnClickListener {
+//                    //get position of item in queue
+//                    //queueManager.reorderQueue(1, position)
+//                }
+//
+//                destCard.findViewById<Button>(R.id.downButton).setOnClickListener {
+//                    //get position of item within queue
+//                    //queueManager.reorderQueue(-1, position)
+//                }
             }
         }
     }

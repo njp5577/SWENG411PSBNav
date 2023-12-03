@@ -28,4 +28,6 @@
     <string name="remove">Remove</string>
     <string name="up">Up</string>
     <string name="down">Down</string>
+    <string name="search">Search...</string>
+    <string name="submit">Submit</string>
 </resources>

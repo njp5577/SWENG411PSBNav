@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/destCard"
         android:layout_width="295dp"
-        android:layout_height="wrap_content"
+        android:layout_height="140dp"
         android:layout_margin="5dp"
         card_view:cardBackgroundColor="@color/matteRoyalBlue"
         card_view:cardCornerRadius="5dp"
@@ -29,15 +29,6 @@
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/locationTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/event_location"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/removeButton"
