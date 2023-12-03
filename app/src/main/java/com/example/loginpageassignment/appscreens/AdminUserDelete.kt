@@ -17,6 +17,7 @@ class AdminUserDelete : LoggedInPageAdmin() {
 
     // Reference to the "Users" collection in Firestore
     private val userRef = FirebaseFirestore.getInstance().collection("Users")
+    private val queueRef = FirebaseFirestore.getInstance().collection("Queues")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +56,20 @@ class AdminUserDelete : LoggedInPageAdmin() {
     }
 
     private fun deleteUser(documents : QuerySnapshot){
+        //Check all users to look for a match
+        queueRef.whereEqualTo("user", documents.documents[0].getString("username")).get().addOnSuccessListener{ documentsTwo ->
+            if (documentsTwo.isEmpty)
+            {
+                Toast.makeText(this, "No queues under this account.", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                documentsTwo.documents[0].reference.delete().addOnSuccessListener {
+                    Toast.makeText(this, "Queues under this account were deleted.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         documents.documents[0].reference.delete().addOnSuccessListener {
             Toast.makeText(this, "The user under this email has been deleted.", Toast.LENGTH_SHORT).show()
         }

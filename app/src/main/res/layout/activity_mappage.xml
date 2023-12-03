@@ -16,14 +16,31 @@
         android:text="Map Page"
         app:srcCompat="@mipmap/ic_launcher_round"/>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="1000px"
+        android:layout_height="250px"
+        android:padding="16dp">
+
     <Button
-        android:id="@+id/buttonChange"
-        android:layout_width="match_parent"
+        android:id="@+id/buttonNext"
+        android:layout_width="300px"
         android:layout_height="wrap_content"
         android:layout_below="@id/landingText"
         android:gravity="center"
         android:layout_marginTop="20dp"
-        android:text="Change" />
+        android:text="Next" />
+
+        <Button
+            android:id="@+id/buttonPrev"
+            android:layout_width="300px"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/landingText"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Previous" />
+
+    </LinearLayout>
 
     <WebView
         android:id="@+id/googlemap_webView"
