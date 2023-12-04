@@ -30,4 +30,6 @@
     <string name="down">Down</string>
     <string name="search">Search...</string>
     <string name="submit">Submit</string>
+    <string name="home">home</string>
+    <string name="refresh">refresh</string>
 </resources>
