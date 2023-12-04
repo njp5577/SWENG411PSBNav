@@ -1,7 +1,9 @@
 package com.example.loginpageassignment.parentpageclasses
 
+import android.view.Menu
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.loginpageassignment.R
 import kotlin.system.exitProcess
 
 abstract class Page : AppCompatActivity() {
@@ -19,5 +21,11 @@ abstract class Page : AppCompatActivity() {
     protected fun backApp(){
         finish()
         exitProcess(0)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean
+    {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
     }
 }

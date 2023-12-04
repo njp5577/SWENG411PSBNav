@@ -38,7 +38,6 @@
         <activity android:name=".appscreens.AdminUserDelete"></activity>
         <activity android:name=".appscreens.AdminAddAdmin"></activity>
         <activity android:name=".appscreens.AdminAddEventOrg"></activity>
-
     </application>
 
 </manifest>
