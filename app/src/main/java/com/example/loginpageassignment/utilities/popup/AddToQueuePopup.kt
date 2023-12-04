@@ -29,7 +29,7 @@ data class SearchResult(
 {
     constructor() : this("", 0.0, 0.0, "")
 }
-
+//TODO: Add page refresh after popup disappears
 class AddToQueuePopup(private val context: Context) : DetailsPopup()
 {
     private var alertDialog: AlertDialog? = null
@@ -46,7 +46,7 @@ class AddToQueuePopup(private val context: Context) : DetailsPopup()
         val searchRecyclerView = dialogView.findViewById<RecyclerView>(R.id.searchRecyclerView)
 
         // Set up RecyclerView with an empty list initially
-        val searchAdapter = SearchAdapter(user.username, emptyList()) { alertDialog?.dismiss()}
+        val searchAdapter = SearchAdapter(context, user.username, emptyList()) { alertDialog?.dismiss()}
         searchRecyclerView.layoutManager = LinearLayoutManager(context)
         searchRecyclerView.adapter = searchAdapter
 
@@ -83,6 +83,7 @@ class AddToQueuePopup(private val context: Context) : DetailsPopup()
     }
 
     class SearchAdapter(
+        private val context: Context,
         private var username : String,
         private var searchResults : List<SearchResult>,
         private val dismissCallback: () -> Unit) :
@@ -109,7 +110,7 @@ class AddToQueuePopup(private val context: Context) : DetailsPopup()
             holder.itemView.findViewById<TextView>(R.id.descriptionTextView).text = result.desc
 
             holder.itemView.setOnClickListener {
-                QueueManager.getQueueManager(username)?.addToQueue(
+                QueueManager.getQueueManager(username, context)?.addToQueue(
                     Location(
                         result.name,
                         result.latitude,
