@@ -1,6 +1,7 @@
 //DestinationQueue.kt
 package com.example.loginpageassignment.appscreens
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,9 +33,7 @@ data class DestQueue(var user: String, var list: MutableList<Location>)
 /*
 TODO:
     Add default text for when no locations in queue
-    Remove from queue button functionality
     move up/down button functionality
-    test scroll capabilities
     possibly extract adapter to its own class and set up generalization relationship with event adapter
 */
 class DestinationQueue : LoggedInPage()
@@ -56,7 +55,7 @@ class DestinationQueue : LoggedInPage()
         recyclerView = findViewById(R.id.destQueueRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        destQueueAdapter = DestQueueAdapter(getLoggedInAsFun().username)
+        destQueueAdapter = DestQueueAdapter(getLoggedInAsFun().username, this)
         recyclerView.adapter = destQueueAdapter
 
         val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -124,11 +123,11 @@ class DestinationQueue : LoggedInPage()
     }
 
     // Adapter to bind data to RecyclerView
-    class DestQueueAdapter(username : String) :
+    class DestQueueAdapter(username : String, context: Context) :
         RecyclerView.Adapter<DestQueueAdapter.ViewHolder>()
     {
         private var destQueueList = mutableListOf<Location>()
-        private val queueManager = QueueManager.getQueueManager(username)
+        private val queueManager = QueueManager.getQueueManager(username, context)
         @SuppressLint("NotifyDataSetChanged")
         fun setData(data: MutableList<Location>)
         {
@@ -176,10 +175,10 @@ class DestinationQueue : LoggedInPage()
             {
                 destCard.findViewById<TextView>(R.id.nameTextView).text = destData.name
 
-//                destCard.findViewById<Button>(R.id.removeButton).setOnClickListener {
-//                    //grab location from card and pass to function
-//                    //queueManager.removeFromQueue()
-//                }
+                destCard.findViewById<Button>(R.id.removeButton).setOnClickListener {
+                    //grab location from card and pass to function
+                    queueManager.removeFromQueue(destData)
+                }
 //
 //                destCard.findViewById<Button>(R.id.upButton).setOnClickListener {
 //                    //get position of item in queue
@@ -194,42 +193,3 @@ class DestinationQueue : LoggedInPage()
         }
     }
 }
-
-//    private lateinit var buttonAdd: Button
-//    private lateinit var buttonRetrieve: Button
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_destinationqueue)
-//
-//        buttonAdd = findViewById(R.id.buttonAdd)
-//        buttonRetrieve = findViewById(R.id.buttonRetrieve)
-//
-//        val userLogin = intent.getStringExtra("User")
-//        val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
-//        setLoggedInAsFun(user)
-//
-//        val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-//
-//        val queueRef = firestore.collection("Queues")
-//
-//        buttonAdd.setOnClickListener {
-//            val list = mutableListOf(Location("Name1",1.5, 1.1,"Desc1"), Location("Name2",12.5, 13.5, "Desc2"))
-//
-//            queueRef.add(DestQueue(list)).addOnSuccessListener {
-//                Toast.makeText(this, "Added ${DestQueue(list)}!", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//
-//        buttonRetrieve.setOnClickListener {
-//            queueRef.get().addOnSuccessListener{ documents ->
-//                if ((documents.isEmpty)) {
-//                    Toast.makeText(this, "No list in DB", Toast.LENGTH_SHORT).show()
-//                }
-//                else{
-//                    Toast.makeText(this, "Retrieved ${documents.documents[0].get("list")}", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//
-//    }
