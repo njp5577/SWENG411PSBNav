@@ -37,8 +37,8 @@ class EventOrgManageEvents : LoggedInPageEventOrg()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_eventorgmanageevents)
 
-        var userLogin = intent.getStringExtra("User")
-        var user = Json.decodeFromString<CurrentUser>(userLogin.toString())
+        val userLogin = intent.getStringExtra("User")
+        val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
         initializeView()
@@ -76,7 +76,7 @@ class EventOrgManageEvents : LoggedInPageEventOrg()
         else
         {
             eventRef.add(PSB_Event(iname, ilocation, idate, itime, idescription)).addOnSuccessListener {
-                val message = "Event added with name: " + iname
+                val message = "Event added with name: $iname"
                 showToast(message, this)
                 editTextName.setText("")
                 editTextLocation.setText("")

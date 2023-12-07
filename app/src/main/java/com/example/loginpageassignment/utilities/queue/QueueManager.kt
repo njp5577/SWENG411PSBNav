@@ -35,7 +35,7 @@ class QueueManager private constructor(private val username: String, private val
                     {
                         addNewLocation(location, locationList)
                         showToast("${location.name} added to queue")
-                        updateQueue(document.id, "list", existingLocations)
+                        updateQueue(document.id, existingLocations)
                     }
                 }
             }
@@ -74,9 +74,9 @@ class QueueManager private constructor(private val username: String, private val
     }
 
     // Update the user's queue in Firestore
-    private fun updateQueue(documentId: String, field: String, value: Any)
+    private fun updateQueue(documentId: String, value: Any)
     {
-        queueRef.document(documentId).update(field, value)
+        queueRef.document(documentId).update("list", value)
             .addOnSuccessListener { Log.d("Queue", "Queue Updated") }
             .addOnFailureListener { e -> Log.e("Queue", "Error updating document", e) }
     }
@@ -101,7 +101,7 @@ class QueueManager private constructor(private val username: String, private val
                 {
                     val locationList = existingLocations as MutableList<Map<String, Any>>
                     val locationRemoved = removeLocation(location, locationList)
-                    updateQueue(document.id, "list", existingLocations)
+                    updateQueue(document.id, existingLocations)
 
                     if (locationRemoved)
                     {

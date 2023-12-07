@@ -51,8 +51,8 @@ class MapPage : LoggedInPageAdmin() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mappage)
 
-        var userLogin = intent.getStringExtra("User")
-        var user = Json.decodeFromString<CurrentUser>(userLogin.toString())
+        val userLogin = intent.getStringExtra("User")
+        val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
 
@@ -93,7 +93,7 @@ class MapPage : LoggedInPageAdmin() {
                                 result.addOnCompleteListener {
                                     currentLatitude = it.result.latitude
                                     currentLongitude = it.result.longitude
-                                    Log.d("stuff", currentLatitude.toString() + ", " + currentLongitude.toString())
+                                    Log.d("stuff", "$currentLatitude, $currentLongitude")
                                     Timer().schedule(5000){ initializeMap() }
                                 }
                             }
@@ -144,13 +144,13 @@ class MapPage : LoggedInPageAdmin() {
 
         task.addOnFailureListener { e ->
             if (e is ResolvableApiException) {
-                try {
+                try
+                {
                     e.startResolutionForResult(
                         this, 100
                     )
-                } catch (sendEx: java.lang.Exception){
-
                 }
+                catch (sendEx: java.lang.Exception){ Log.e("Map", sendEx.toString()) }
             }
         }
     }
@@ -169,8 +169,8 @@ class MapPage : LoggedInPageAdmin() {
             val destLat = destQueueList[0].list[0].latitude
             val destLong = destQueueList[0].list[0].longitude
 
-            Log.d("stuffcoord1", destLat.toString() + ", " + destLong.toString())
-            Log.d("stuffmine", currentLatitude.toString() + ", " + currentLongitude.toString())
+            Log.d("stuffcoord1", "$destLat, $destLong")
+            Log.d("stuffmine", "$currentLatitude, $currentLongitude")
 
             val iframe =
                 "<iframe src=https://www.google.com/maps/embed?pb=!1m24!1m12!1m3!1d14050.37982627822!2d-79.987709!3d42.119320!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m9!3e2!4m3!3m2!1d$currentLatitude!2d$currentLongitude!4m3!3m2!1d$destLat!2d$destLong!5e1!3m2!1sen!2sus!4v1699136150186!5m2!1sen!2sus width=100% height=100% frameborder=0 style=border:0</iframe>"

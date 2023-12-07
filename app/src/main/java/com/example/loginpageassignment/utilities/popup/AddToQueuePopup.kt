@@ -93,7 +93,8 @@ class AddToQueuePopup(private val context: Context,
         private var searchResults: List<SearchResult>,
         private val dismissCallback: PopupDismissCallback) : RecyclerView.Adapter<SearchAdapter.ViewHolder>()
     {
-        inner class ViewHolder(itemView :View) : RecyclerView.ViewHolder(itemView){}
+        inner class ViewHolder(itemView :View) : RecyclerView.ViewHolder(itemView)
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.ViewHolder
         {
             val view = LayoutInflater.from(parent.context).inflate(

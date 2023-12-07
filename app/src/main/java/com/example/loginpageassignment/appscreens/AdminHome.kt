@@ -43,8 +43,8 @@ class AdminHome : LoggedInPageAdmin() {
         buttonAddEventOrg = findViewById(R.id.buttonAddEventOrg)
         buttonDeleteAccount = findViewById(R.id.buttonDeleteAccount)
 
-        var userLogin = intent.getStringExtra("User")
-        var user = Json.decodeFromString<CurrentUser>(userLogin.toString())
+        val userLogin = intent.getStringExtra("User")
+        val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
         showToast("Hello ${getLoggedInAsFun().username}!", this)

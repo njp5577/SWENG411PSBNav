@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.example.loginpageassignment.R
@@ -12,7 +11,6 @@ import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.Location
 import com.example.loginpageassignment.dataobjects.PSB_Event
 import com.example.loginpageassignment.utilities.queue.QueueManager
-import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 
 class EventsPopup(private val context: Context) : DetailsPopup()

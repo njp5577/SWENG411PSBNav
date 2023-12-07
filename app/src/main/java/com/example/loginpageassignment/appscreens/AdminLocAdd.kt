@@ -57,14 +57,12 @@ class AdminLocAdd : LoggedInPageAdmin()
         setEditTextDescFun(findViewById(R.id.editTextDesc))
         setButtonAddLocFun(findViewById(R.id.buttonAddLoc))
 
-        var firestore: FirebaseFirestore;
+        var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-        firestore = FirebaseFirestore.getInstance()
+        val locRef = firestore.collection("Locations")
 
-        var locRef = firestore.collection("Locations")
-
-        var userLogin = intent.getStringExtra("User")
-        var user = Json.decodeFromString<CurrentUser>(userLogin.toString())
+        val userLogin = intent.getStringExtra("User")
+        val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
         buttonAddLoc.setOnClickListener {
@@ -111,7 +109,7 @@ class AdminLocAdd : LoggedInPageAdmin()
                 {
                     //Create location if there are no issues
                     locRef.add(Location(iname, lat, long, idesc)).addOnSuccessListener {
-                        val message = "Location added at " + lat + ", " + long
+                        val message = "Location added at $lat, $long"
                         showToast(message, this)
                     }
                 }

@@ -34,8 +34,8 @@ class AdminUserDelete : LoggedInPageAdmin()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adminuserdelete)
 
-        var userLogin = intent.getStringExtra("User")
-        var user = Json.decodeFromString<CurrentUser>(userLogin.toString())
+        val userLogin = intent.getStringExtra("User")
+        val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
         initializeView()
