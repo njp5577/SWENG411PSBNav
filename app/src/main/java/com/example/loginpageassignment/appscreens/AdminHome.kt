@@ -2,7 +2,6 @@ package com.example.loginpageassignment.appscreens
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
@@ -48,7 +47,7 @@ class AdminHome : LoggedInPageAdmin() {
         var user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
-        Toast.makeText(this, "Hello ${getLoggedInAsFun().username}!", Toast.LENGTH_SHORT).show()
+        showToast("Hello ${getLoggedInAsFun().username}!", this)
 
         getButtonAddLocFun().setOnClickListener {
             val go = Intent(this, AdminLocAdd::class.java)

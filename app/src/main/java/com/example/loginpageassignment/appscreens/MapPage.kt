@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.webkit.WebView
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
@@ -83,34 +82,29 @@ class MapPage : LoggedInPageAdmin() {
             when {
                 permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) ||
                         permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                            Toast.makeText(this, "Location access granted.", Toast.LENGTH_SHORT).show()
+                            showToast("Location access granted.", this)
 
-                            if(isLocationEnabled()) {
+                            if(isLocationEnabled())
+                            {
                                 val result = fusedLocationClient.getCurrentLocation(
                                     Priority.PRIORITY_HIGH_ACCURACY,
-                                    CancellationTokenSource().token
-                                )
+                                    CancellationTokenSource().token)
+
                                 result.addOnCompleteListener {
                                     currentLatitude = it.result.latitude
                                     currentLongitude = it.result.longitude
-
                                     Log.d("stuff", currentLatitude.toString() + ", " + currentLongitude.toString())
-
-                                    Timer().schedule(5000){
-                                        initializeMap()
-                                    }
+                                    Timer().schedule(5000){ initializeMap() }
                                 }
                             }
-                            else{
-                                Toast.makeText(this, "Turn on the location to continue.", Toast.LENGTH_SHORT).show()
-
+                            else
+                            {
+                                showToast("Turn on the location to continue.", this)
                                 createLocationRequest()
                             }
                         }
 
-                        else -> {
-                            Toast.makeText(this, "No location access granted.", Toast.LENGTH_SHORT).show()
-                        }
+                        else -> { showToast("No location access granted.", this) }
             }
         }
 
@@ -191,28 +185,30 @@ class MapPage : LoggedInPageAdmin() {
             //Check if incorrect credentials
             if (documents.isEmpty)
             {
-                Toast.makeText(this, "This user does not have a destination queue.", Toast.LENGTH_SHORT).show()
+                showToast("This user does not have a destination queue.", this)
             }
             else
             {
                 val destQueueList = mutableListOf<DestQueue>()
-                for (document in documents) {
+                for (document in documents)
+                {
                     val destQueue = document.toObject(DestQueue::class.java)
                     destQueueList.add(destQueue)
                 }
 
-                if(destQueueList[0].list.isEmpty()){
-                    Toast.makeText(this, "Need two or more destinations in queue to do shuffling. You have zero.", Toast.LENGTH_SHORT).show()
+                if(destQueueList[0].list.isEmpty())
+                {
+                    showToast("Need two or more destinations in queue to do shuffling. You have zero.", this)
                 }
-                else if (destQueueList[0].list.size == 1){
-                    Toast.makeText(this, "Need two or more destinations in queue to do shuffling. You have one.", Toast.LENGTH_SHORT).show()
+                else if (destQueueList[0].list.size == 1)
+                {
+                    showToast("Need two or more destinations in queue to do shuffling. You have one.", this)
                 }
-                else{
+                else
+                {
                     val newQueue = shuffleQueueForward(destQueueList[0].list)
-
                     documents.documents[0].reference.update("list", newQueue).addOnSuccessListener {
-                        Toast.makeText(this, "Destination queue shuffled forward one place.", Toast.LENGTH_SHORT).show()
-
+                        showToast("Destination queue shuffled forward one place.", this)
                         initializeMap()
                     }
                 }
@@ -225,28 +221,30 @@ class MapPage : LoggedInPageAdmin() {
             //Check if incorrect credentials
             if (documents.isEmpty)
             {
-                Toast.makeText(this, "This user does not have a destination queue.", Toast.LENGTH_SHORT).show()
+                showToast("This user does not have a destination queue.", this)
             }
             else
             {
                 val destQueueList = mutableListOf<DestQueue>()
-                for (document in documents) {
+                for (document in documents)
+                {
                     val destQueue = document.toObject(DestQueue::class.java)
                     destQueueList.add(destQueue)
                 }
 
-                if(destQueueList[0].list.isEmpty()){
-                    Toast.makeText(this, "Need two or more destinations in queue to do shuffling. You have zero.", Toast.LENGTH_SHORT).show()
+                if(destQueueList[0].list.isEmpty())
+                {
+                    showToast("Need two or more destinations in queue to do shuffling. You have zero.", this)
                 }
-                else if (destQueueList[0].list.size == 1){
-                    Toast.makeText(this, "Need two or more destinations in queue to do shuffling. You have one.", Toast.LENGTH_SHORT).show()
+                else if (destQueueList[0].list.size == 1)
+                {
+                    showToast("Need two or more destinations in queue to do shuffling. You have one.", this)
                 }
                 else{
                     val newQueue = shuffleQueueBackward(destQueueList[0].list)
 
                     documents.documents[0].reference.update("list", newQueue).addOnSuccessListener {
-                        Toast.makeText(this, "Destination queue shuffled backward one place.", Toast.LENGTH_SHORT).show()
-
+                        showToast("Destination queue shuffled backward one place.", this)
                         initializeMap()
                     }
                 }

@@ -3,12 +3,10 @@ package com.example.loginpageassignment.appscreens
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedOutPage
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.mindrot.jbcrypt.BCrypt
@@ -18,24 +16,17 @@ class SignIn : LoggedOutPage() {
     private lateinit var buttonSignUp: Button
     private lateinit var buttonReset: Button
 
-    private fun getButtonResetFun(): Button{
-        return this.buttonReset
-    }
+    private fun getButtonResetFun(): Button{ return this.buttonReset }
 
-    private fun setButtonResetFun(buttonReset: Button){
-        this.buttonReset = buttonReset
-    }
+    private fun setButtonResetFun(buttonReset: Button){ this.buttonReset = buttonReset }
 
-    private fun getButtonSignUpFun(): Button{
-        return this.buttonSignUp
-    }
+    private fun getButtonSignUpFun(): Button{ return this.buttonSignUp }
 
-    private fun setButtonSignUpFun(buttonSignUp: Button){
-        this.buttonSignUp = buttonSignUp
-    }
+    private fun setButtonSignUpFun(buttonSignUp: Button){ this.buttonSignUp = buttonSignUp }
 
-    private fun showInvalidCredentialsMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun showInvalidCredentialsMessage(message: String)
+    {
+       showToast(message, this)
     }
 
     private fun navigateToHomePage(userType: String, username: String) {

@@ -3,7 +3,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
@@ -12,7 +11,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class AdminUserDelete : LoggedInPageAdmin() {
+class AdminUserDelete : LoggedInPageAdmin()
+{
 
     private lateinit var editTextEmail: EditText
     private lateinit var buttonDelete: Button
@@ -29,7 +29,8 @@ class AdminUserDelete : LoggedInPageAdmin() {
         startActivity(go)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adminuserdelete)
 
@@ -43,12 +44,14 @@ class AdminUserDelete : LoggedInPageAdmin() {
         buttonDelete.setOnClickListener { handleDeleteUser() }
     }
 
-    private fun initializeView(){
+    private fun initializeView()
+    {
         editTextEmail = findViewById(R.id.editTextEmail)
         buttonDelete = findViewById(R.id.buttonDelete)
     }
 
-    private fun handleDeleteUser(){
+    private fun handleDeleteUser()
+    {
         val iemail = editTextEmail.text.toString()
 
         //Check all users to look for a match
@@ -56,7 +59,7 @@ class AdminUserDelete : LoggedInPageAdmin() {
             //Check if incorrect credentials
             if (documents.isEmpty)
             {
-                Toast.makeText(this, "No account under that email.", Toast.LENGTH_SHORT).show()
+                showToast("No account under that email.", this)
             }
             else
             {
@@ -65,23 +68,24 @@ class AdminUserDelete : LoggedInPageAdmin() {
         }
     }
 
-    private fun deleteUser(documents : QuerySnapshot){
+    private fun deleteUser(documents : QuerySnapshot)
+    {
         //Check all users to look for a match
         queueRef.whereEqualTo("user", documents.documents[0].getString("username")).get().addOnSuccessListener{ documentsTwo ->
             if (documentsTwo.isEmpty)
             {
-                Toast.makeText(this, "No queues under this account.", Toast.LENGTH_SHORT).show()
+                showToast("No queues under this account.", this)
             }
             else
             {
                 documentsTwo.documents[0].reference.delete().addOnSuccessListener {
-                    Toast.makeText(this, "Queues under this account were deleted.", Toast.LENGTH_SHORT).show()
+                    showToast("Queues under this account were deleted.", this)
                 }
             }
         }
 
         documents.documents[0].reference.delete().addOnSuccessListener {
-            Toast.makeText(this, "The user under this email has been deleted.", Toast.LENGTH_SHORT).show()
+            showToast("The user under this email has been deleted.", this)
         }
     }
 }
