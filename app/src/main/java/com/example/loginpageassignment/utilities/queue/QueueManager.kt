@@ -2,10 +2,8 @@ package com.example.loginpageassignment.utilities.queue
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import com.example.loginpageassignment.appscreens.DestinationQueue
 import com.example.loginpageassignment.dataobjects.Location
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -23,103 +21,109 @@ class QueueManager private constructor(private val username: String, private val
                 val existingLocations = document["list"]
 
                 // Check if locations are not null and of the expected type
-                if (existingLocations is MutableList<*> && existingLocations.all { it is Map<*, *> }) {
+                if (isValidLocationList(existingLocations))
+                {
                     val locationList = existingLocations as MutableList<Map<String, Any>>
 
                     // Check if the location already exists in the list
-                    if (locationList.any {
-                            it["name"] == location.name &&
-                            it["desc"] == location.desc &&
-                            it["latitude"] == location.latitude &&
-                            it["longitude"] == location.longitude })
+                    if (locationAlreadyExists(location, locationList))
                     {
-                        Toast.makeText(context, "Location already exists within queue", Toast.LENGTH_SHORT).show()
+                        showToast("Location already exists within queue")
                     }
                     else // Add new location
                     {
-                        locationList.add(
-                            mapOf(
-                                "name" to location.name,
-                                "desc" to location.desc,
-                                "latitude" to location.latitude,
-                                "longitude" to location.longitude
-                            ))
-
-                        // Update the document with the new location
-                        queueRef.document(document.id).update("list", existingLocations)
-                            .addOnSuccessListener {
-                                Log.d("Queue", "Queue Updated")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e("Queue", "Error updating document", e)
-                            }
+                        addNewLocation(location, locationList)
+                        showToast("${location.name} added to queue")
+                        updateQueue(document.id, "list", existingLocations)
                     }
                 }
             }
         }
+    }
+
+    private fun isValidLocationList(existingLocations: Any?): Boolean
+    {
+        return existingLocations is MutableList<*> && existingLocations.all { it is Map<*, *> }
+    }
+
+    private fun locationAlreadyExists(location: Location,
+                                      locationList: MutableList<Map<String, Any>>): Boolean
+    {
+        return locationList.any {
+            it["name"] == location.name &&
+                    it["desc"] == location.desc &&
+                    it["latitude"] == location.latitude &&
+                    it["longitude"] == location.longitude
+        }
+    }
+
+    private fun addNewLocation(location: Location, locationList: MutableList<Map<String, Any>>)
+    {
+        locationList.add(
+            mapOf(
+                "name" to location.name,
+                "desc" to location.desc,
+                "latitude" to location.latitude,
+                "longitude" to location.longitude
+            )
+        )
+    }
+
+    private fun updateQueue(documentId: String, field: String, value: Any)
+    {
+        queueRef.document(documentId).update(field, value)
+            .addOnSuccessListener { Log.d("Queue", "Queue Updated") }
+            .addOnFailureListener { e -> Log.e("Queue", "Error updating document", e) }
+    }
+
+    private fun showToast(message: String)
+    {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     fun removeFromQueue(location: Location?)
     {
-        var locationRemoved = false
+        if (location == null) return
 
         queueRef.whereEqualTo("user", username).get().addOnSuccessListener { documents ->
-            for (document in documents) {
+            for (document in documents)
+            {
                 val existingLocations = document["list"]
 
-                // Check if "locations" is not null and of the expected type
-                if (existingLocations is MutableList<*>
-                    && existingLocations.all { it is Map<*, *> })
+                if (isValidLocationList(existingLocations))
                 {
                     val locationList = existingLocations as MutableList<Map<String, Any>>
+                    val locationRemoved = removeLocation(location, locationList)
+                    updateQueue(document.id, "list", existingLocations)
 
-                    // If "locations" exists, find and remove the specified location
-                    if (location != null)
+                    if (locationRemoved)
                     {
-                        val iterator = locationList.iterator()
-                        while (iterator.hasNext())
-                        {
-                            val existingLocation = iterator.next()
-
-                            // Compare the location properties for equality
-                            if (existingLocation["name"] == location.name &&
-                                existingLocation["desc"] == location.desc &&
-                                existingLocation["latitude"] == location.latitude &&
-                                existingLocation["longitude"] == location.longitude)
-                            {
-                                iterator.remove()
-                                locationRemoved = true
-                                break
-                            }
-                        }
-
-                        // Update the document with the modified location list
-                        queueRef.document(document.id).update("list", existingLocations)
-                            .addOnSuccessListener {
-                                if (locationRemoved)
-                                {
-                                    Log.d("Queue", "Location removed from the queue")
-                                    // Refresh the page by restarting the activity
-                                   // restartActivity()
-                                }
-                                else
-                                    Log.d("Queue", "Location not found in the queue")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e("Queue", "Error updating document", e)
-                            }
+                        Log.d("Queue", "Location removed from the queue")
+                        showToast("${location.name} removed from queue")
                     }
+                    else Log.d("Queue", "Location not found in the queue")
                 }
             }
         }
     }
 
-    private fun restartActivity()
-    {
-        val intent = Intent(context, DestinationQueue::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        intent.putExtra("User", username)
-        context.startActivity(intent)
+    private fun removeLocation(location: Location,
+                               locationList: MutableList<Map<String, Any>>): Boolean {
+        val iterator = locationList.iterator()
+        while (iterator.hasNext()) {
+            val existingLocation = iterator.next()
+
+            // Compare the location properties for equality
+            if (existingLocation["name"] == location.name &&
+                existingLocation["desc"] == location.desc &&
+                existingLocation["latitude"] == location.latitude &&
+                existingLocation["longitude"] == location.longitude
+            ) {
+                iterator.remove()
+                return true
+            }
+        }
+        return false
     }
 
     //shift up/down by +/- 1
