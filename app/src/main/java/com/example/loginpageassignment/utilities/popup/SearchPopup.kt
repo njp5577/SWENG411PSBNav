@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.compose.ui.text.toLowerCase
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loginpageassignment.R
@@ -21,6 +22,7 @@ import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import com.example.loginpageassignment.utilities.managers.QueueManager
 
 import kotlinx.serialization.Serializable
+import java.util.Locale
 
 @Serializable
 data class SearchResult(
@@ -62,10 +64,11 @@ class AddToQueuePopup(private val context: Context,
             val query = searchEditText.text.toString().trim()
             if (query.isNotEmpty())
             {
-                locationRef?.whereEqualTo("name", query)?.get()
-                    ?.addOnSuccessListener { documents ->
+                locationRef?.get()?.addOnSuccessListener { documents ->
                         val searchResults = documents.map{
                                 doc -> doc.toObject(SearchResult::class.java)
+                        }.filter { result ->
+                            result.name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))
                         }
                         searchAdapter.setData(searchResults)
                         searchRecyclerView.visibility = View.VISIBLE
