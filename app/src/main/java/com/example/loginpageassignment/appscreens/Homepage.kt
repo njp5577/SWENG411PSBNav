@@ -12,7 +12,8 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 
-class Homepage : LoggedInPageUser() {
+class Homepage() : LoggedInPageUser()
+{
 
     private lateinit var buttonMapPage: Button
     private lateinit var buttonDestinationQueue: Button
@@ -22,28 +23,21 @@ class Homepage : LoggedInPageUser() {
     // Reference to the "Users" collection in Firestore
     private val userRef = FirebaseFirestore.getInstance().collection("Users")
 
-    private fun getButtonMapPageFun() : Button {
-        return this.buttonMapPage
-    }
+    private fun getButtonMapPageFun() : Button { return this.buttonMapPage }
 
-    private fun setButtonMapPageFun(buttonMapPage: Button){
-        this.buttonMapPage = buttonMapPage
-    }
+    private fun setButtonMapPageFun(buttonMapPage: Button){ this.buttonMapPage = buttonMapPage }
 
-    private fun getButtonDestinationQueueFun() : Button {
-        return this.buttonDestinationQueue
-    }
+    private fun getButtonDestinationQueueFun() : Button { return this.buttonDestinationQueue }
 
-    private fun setButtonDestinationQueueFun(buttonDestinationQueue: Button){
-        this.buttonDestinationQueue = buttonDestinationQueue
-    }
+    private fun setButtonDestinationQueueFun(buttonDestinationQueue: Button){ this.buttonDestinationQueue = buttonDestinationQueue }
 
-    private fun getButtonEventPageFun() : Button {
-        return this.buttonEventPage
-    }
+    private fun getButtonEventPageFun() : Button { return this.buttonEventPage }
 
-    private fun setButtonEventPageFun(buttonEventPage: Button){
-        this.buttonEventPage = buttonEventPage
+    private fun setButtonEventPageFun(buttonEventPage: Button){ this.buttonEventPage = buttonEventPage }
+
+    override fun refresh()
+    {
+        TODO("Not yet implemented")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

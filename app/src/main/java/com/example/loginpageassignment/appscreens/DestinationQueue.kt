@@ -2,6 +2,7 @@
 package com.example.loginpageassignment.appscreens
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.example.loginpageassignment.utilities.popup.AddToQueuePopup
 import com.example.loginpageassignment.utilities.queue.QueueManager
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
@@ -32,7 +34,6 @@ data class DestQueue(var user: String, var list: MutableList<Location>)
 
 /*
 TODO:
-    Add default text for when no locations in queue
     move up/down button functionality
     possibly extract adapter to its own class and set up generalization relationship with event adapter
 */
@@ -42,6 +43,14 @@ class DestinationQueue : LoggedInPage()
     private lateinit var destQueueAdapter: DestQueueAdapter
     private lateinit var addToQueueButton: Button
     private var addToQueuePopup = AddToQueuePopup(this)
+
+    override fun refresh()
+    {
+        val go = Intent(this, DestinationQueue::class.java)
+        val json = Json.encodeToString(getLoggedInAsFun())
+        go.putExtra("User", json)
+        startActivity(go)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?)
     {

@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.loginpageassignment.R
 import kotlin.system.exitProcess
 
-abstract class Page : AppCompatActivity() {
+abstract class Page : AppCompatActivity()
+{
 
-    protected lateinit var buttonBack: Button
+    private lateinit var buttonBack: Button
+
+    protected abstract fun refresh()
 
     public fun getButtonBackFun(): Button{
         return this.buttonBack
@@ -25,7 +28,16 @@ abstract class Page : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean
     {
+        //set default app bar
         menuInflater.inflate(R.menu.menu, menu)
+
+
+//        //refresh button listener
+//        findViewById<Button>(R.id.refresh).setOnClickListener{
+//
+//        }
+
+
         return true
     }
 }

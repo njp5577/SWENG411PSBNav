@@ -1,4 +1,5 @@
 package com.example.loginpageassignment.appscreens
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -8,6 +9,7 @@ import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class AdminLocDelete: LoggedInPageAdmin() {
@@ -17,6 +19,14 @@ class AdminLocDelete: LoggedInPageAdmin() {
 
     // Reference to the "Users" collection in Firestore
     private val locRef = FirebaseFirestore.getInstance().collection("Locations")
+
+    override fun refresh()
+    {
+        val go = Intent(this, AdminLocDelete::class.java)
+        val json = Json.encodeToString(getLoggedInAsFun())
+        go.putExtra("User", json)
+        startActivity(go)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

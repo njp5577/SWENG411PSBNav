@@ -1,5 +1,6 @@
 package com.example.loginpageassignment.appscreens
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -9,6 +10,7 @@ import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.PSB_Event
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageEventOrg
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class EventOrgManageEvents : LoggedInPageEventOrg() {
@@ -21,6 +23,14 @@ class EventOrgManageEvents : LoggedInPageEventOrg() {
     private lateinit var buttonEvent: Button
 
     private val eventRef = FirebaseFirestore.getInstance().collection("Events")
+
+    override fun refresh()
+    {
+        val go = Intent(this, EventOrgManageEvents::class.java)
+        val json = Json.encodeToString(getLoggedInAsFun())
+        go.putExtra("User", json)
+        startActivity(go)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

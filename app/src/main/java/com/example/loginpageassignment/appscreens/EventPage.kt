@@ -1,6 +1,7 @@
 //EventPage.kt
 package com.example.loginpageassignment.appscreens
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.example.loginpageassignment.parentpageclasses.LoggedInPage
 import com.example.loginpageassignment.dataobjects.PSB_Event
 import com.example.loginpageassignment.utilities.popup.EventsPopup
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class EventPage : LoggedInPage()
@@ -27,6 +29,14 @@ class EventPage : LoggedInPage()
     private val eventsPopup = EventsPopup(this)
     private var limit = 5 // Initial limit
     private var loading = false
+
+    override fun refresh()
+    {
+        val go = Intent(this, EventPage::class.java)
+        val json = Json.encodeToString(getLoggedInAsFun())
+        go.putExtra("User", json)
+        startActivity(go)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?)
     {

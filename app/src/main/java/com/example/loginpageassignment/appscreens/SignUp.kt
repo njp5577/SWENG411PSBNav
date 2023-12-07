@@ -22,6 +22,8 @@ class SignUp : LoggedOutPage()
     // Reference to the "Users" collection in Firestore
     private val userRef = FirebaseFirestore.getInstance().collection("Users")
 
+    override fun refresh() { startActivity(Intent(this, SignUp::class.java)) }
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         Log.d("SignUpPage", "on create")

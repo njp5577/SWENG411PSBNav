@@ -1,6 +1,7 @@
 package com.example.loginpageassignment.appscreens
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,7 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.Timer
 import kotlin.concurrent.schedule
@@ -37,6 +39,14 @@ class MapPage : LoggedInPageAdmin() {
     private val queueRef = FirebaseFirestore.getInstance().collection("Queues")
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    override fun refresh()
+    {
+        val go = Intent(this, MapPage::class.java)
+        val json = Json.encodeToString(getLoggedInAsFun())
+        go.putExtra("User", json)
+        startActivity(go)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
