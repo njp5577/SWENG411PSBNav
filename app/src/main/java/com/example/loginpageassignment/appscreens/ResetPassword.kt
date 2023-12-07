@@ -4,13 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.parentpageclasses.LoggedOutPage
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.mindrot.jbcrypt.BCrypt
 
 class ResetPassword : LoggedOutPage()
@@ -48,7 +45,7 @@ class ResetPassword : LoggedOutPage()
         if (ipassword == iconfirm && ipassword.length > 4) {
             val hashedPassword = BCrypt.hashpw(ipassword, BCrypt.gensalt())
             documents.documents[0].reference.update("password", hashedPassword).addOnSuccessListener {
-                Toast.makeText(this, "Password has been reset.", Toast.LENGTH_SHORT).show()
+                showToast("Password has been reset.", this)
                 // Go to login screen
                 startActivity(Intent(this, SignIn::class.java))
             }
@@ -90,7 +87,7 @@ class ResetPassword : LoggedOutPage()
                 //Check if incorrect credentials
                 if (documents.isEmpty)
                 {
-                    Toast.makeText(this, "Invalid username or email.", Toast.LENGTH_SHORT).show()
+                    showToast("Invalid username or email.", this)
                 }
                 else
                 {

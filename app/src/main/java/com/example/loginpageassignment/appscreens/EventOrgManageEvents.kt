@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.PSB_Event
@@ -13,7 +12,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class EventOrgManageEvents : LoggedInPageEventOrg() {
+class EventOrgManageEvents : LoggedInPageEventOrg()
+{
 
     private lateinit var editTextName: EditText
     private lateinit var editTextLocation: EditText
@@ -32,7 +32,8 @@ class EventOrgManageEvents : LoggedInPageEventOrg() {
         startActivity(go)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_eventorgmanageevents)
 
@@ -46,7 +47,8 @@ class EventOrgManageEvents : LoggedInPageEventOrg() {
         buttonEvent.setOnClickListener { handleEventAdd() }
     }
 
-    private fun initializeView(){
+    private fun initializeView()
+    {
         editTextName = findViewById(R.id.editTextName)
         editTextLocation = findViewById(R.id.editTextLocation)
         editTextDate = findViewById(R.id.editTextDate)
@@ -63,18 +65,19 @@ class EventOrgManageEvents : LoggedInPageEventOrg() {
         val idescription = editTextDescription.text.toString()
 
         //Check that user is inputting appropriate number of characters for each field
-        if (iname.length < 4){
-            Toast.makeText(this, "Name must be at least 4 characters.", Toast.LENGTH_SHORT).show()
+        if (iname.length < 4)
+        {
+            showToast("Name must be at least 4 characters.", this)
         }
-        else if (idescription.length < 4){
-            Toast.makeText(this, "Description must be at least 4 characters.", Toast.LENGTH_SHORT).show()
+        else if (idescription.length < 4)
+        {
+            showToast("Description must be at least 4 characters.", this)
         }
-        else {
+        else
+        {
             eventRef.add(PSB_Event(iname, ilocation, idate, itime, idescription)).addOnSuccessListener {
                 val message = "Event added with name: " + iname
-
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-
+                showToast(message, this)
                 editTextName.setText("")
                 editTextLocation.setText("")
                 editTextDate.setText("")

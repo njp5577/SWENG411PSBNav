@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.Location
 import com.example.loginpageassignment.dataobjects.User
@@ -119,7 +118,7 @@ class SignUp : LoggedOutPage()
         // Display validation messages as toasts
         validationMessages.forEach { (condition, message) ->
             if (condition) {
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                showToast(message, this)
             }
         }
     }
@@ -132,15 +131,16 @@ class SignUp : LoggedOutPage()
         userRef.whereEqualTo("email", iemail).get().addOnSuccessListener { documents ->
             if (documents.isEmpty)
                 userRef.whereEqualTo("username", iname).get().addOnSuccessListener { documentsTwo ->
-                    if(documentsTwo.isEmpty){
+                    if(documentsTwo.isEmpty)
+                    {
                         createUserAccount(iemail, iusername, ipassword, iname, type)
                     }
-                    else{
-                        Toast.makeText(this, "An account is already under that username.", Toast.LENGTH_SHORT).show()
+                    else
+                    {
+                        showToast("An account is already under that username.", this)
                     }
                 }
-            else
-                Toast.makeText(this, "An account is already under that email.", Toast.LENGTH_SHORT).show()
+            else showToast("An account is already under that email.", this)
         }
     }
 

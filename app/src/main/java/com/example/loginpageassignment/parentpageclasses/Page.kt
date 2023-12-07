@@ -1,7 +1,9 @@
 package com.example.loginpageassignment.parentpageclasses
 
+import android.content.Context
 import android.view.Menu
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loginpageassignment.R
 import kotlin.system.exitProcess
@@ -12,6 +14,11 @@ abstract class Page : AppCompatActivity()
     private lateinit var buttonBack: Button
 
     protected abstract fun refresh()
+
+    fun showToast(message: String, context : Context)
+    {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
 
     public fun getButtonBackFun(): Button{
         return this.buttonBack

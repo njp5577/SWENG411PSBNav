@@ -3,7 +3,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
@@ -12,7 +11,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class AdminLocDelete: LoggedInPageAdmin() {
+class AdminLocDelete: LoggedInPageAdmin()
+{
 
     private lateinit var editTextName: EditText
     private lateinit var buttonDelete: Button
@@ -28,7 +28,8 @@ class AdminLocDelete: LoggedInPageAdmin() {
         startActivity(go)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adminlocdelete)
 
@@ -42,7 +43,8 @@ class AdminLocDelete: LoggedInPageAdmin() {
         buttonDelete.setOnClickListener { handleDeleteUser() }
     }
 
-    private fun initializeView(){
+    private fun initializeView()
+    {
         editTextName = findViewById(R.id.editTextName)
         buttonDelete = findViewById(R.id.buttonDelete)
     }
@@ -55,7 +57,7 @@ class AdminLocDelete: LoggedInPageAdmin() {
             //Check if incorrect credentials
             if (documents.isEmpty)
             {
-                Toast.makeText(this, "No location under this name.", Toast.LENGTH_SHORT).show()
+                showToast("No location under this name.", this)
             }
             else
             {
@@ -66,7 +68,7 @@ class AdminLocDelete: LoggedInPageAdmin() {
 
     private fun deleteLoc(documents : QuerySnapshot){
         documents.documents[0].reference.delete().addOnSuccessListener {
-            Toast.makeText(this, "The location under this name has been deleted.", Toast.LENGTH_SHORT).show()
+            showToast("The location under this name has been deleted.", this)
         }
     }
 }

@@ -12,6 +12,7 @@ class QueueManager private constructor(private val username: String, private val
 {
     private val queueRef = FirebaseFirestore.getInstance().collection("Queues")
 
+    // Add a location to the user's queue
     fun addToQueue(location: Location?)
     {
         if (location == null) return
@@ -41,11 +42,13 @@ class QueueManager private constructor(private val username: String, private val
         }
     }
 
+    // Check if the given object is a valid list of locations
     private fun isValidLocationList(existingLocations: Any?): Boolean
     {
         return existingLocations is MutableList<*> && existingLocations.all { it is Map<*, *> }
     }
 
+    // Check if a location already exists in the given list
     private fun locationAlreadyExists(location: Location,
                                       locationList: MutableList<Map<String, Any>>): Boolean
     {
@@ -57,6 +60,7 @@ class QueueManager private constructor(private val username: String, private val
         }
     }
 
+    // Add a new location to the list
     private fun addNewLocation(location: Location, locationList: MutableList<Map<String, Any>>)
     {
         locationList.add(
@@ -69,6 +73,7 @@ class QueueManager private constructor(private val username: String, private val
         )
     }
 
+    // Update the user's queue in Firestore
     private fun updateQueue(documentId: String, field: String, value: Any)
     {
         queueRef.document(documentId).update(field, value)
@@ -76,11 +81,13 @@ class QueueManager private constructor(private val username: String, private val
             .addOnFailureListener { e -> Log.e("Queue", "Error updating document", e) }
     }
 
+    // Show a short toast message
     private fun showToast(message: String)
     {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
+    // Remove a location from the user's queue
     fun removeFromQueue(location: Location?)
     {
         if (location == null) return
@@ -107,6 +114,7 @@ class QueueManager private constructor(private val username: String, private val
         }
     }
 
+    // Remove a location from the list
     private fun removeLocation(location: Location,
                                locationList: MutableList<Map<String, Any>>): Boolean {
         val iterator = locationList.iterator()
@@ -126,13 +134,14 @@ class QueueManager private constructor(private val username: String, private val
         return false
     }
 
-    //shift up/down by +/- 1
+    // Shift the position of a location in the user's queue (+1/-1)
     fun reorderQueue(shift: Int, position: Int): Boolean
     {
         //TODO: Write function
         return false
     }
 
+    // Companion object for creating a singleton instance of QueueManager
     companion object
     {
         @SuppressLint("StaticFieldLeak")
