@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock.sleep
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -63,7 +64,7 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
         recyclerView = findViewById(R.id.destQueueRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        destQueueAdapter = DestQueueAdapter(getLoggedInAsFun().username, this)
+        destQueueAdapter = DestQueueAdapter(getLoggedInAsFun().username, this, this::refresh)
         recyclerView.adapter = destQueueAdapter
 
         val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -131,7 +132,7 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
     }
 
     // Adapter to bind data to RecyclerView
-    class DestQueueAdapter(username : String, context: Context) :
+    class DestQueueAdapter(username : String, context: Context, refreshCallback: () -> Unit) :
         RecyclerView.Adapter<DestQueueAdapter.ViewHolder>()
     {
         private var destQueueList = mutableListOf<Location>()
@@ -178,6 +179,10 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
         class ViewHolder(itemView: View) :
             RecyclerView.ViewHolder(itemView)
         {
+            private val refreshCallback: () -> Unit = {
+                (itemView.context as DestinationQueue).refresh()
+            }
+
             // Bind data to views in the ViewHolder
             fun bind(destData: Location, destCard : CardView, queueManager: QueueManager)
             {
@@ -186,7 +191,8 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
                 destCard.findViewById<Button>(R.id.removeButton).setOnClickListener {
                     //grab location from card and pass to function
                     queueManager.removeFromQueue(destData)
-
+                    sleep(500)
+                    refreshCallback.invoke() // call refresh after removing an item
                 }
 //
 //                destCard.findViewById<Button>(R.id.upButton).setOnClickListener {
