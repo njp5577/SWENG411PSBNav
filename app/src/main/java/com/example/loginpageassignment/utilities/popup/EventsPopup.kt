@@ -2,12 +2,18 @@ package com.example.loginpageassignment.utilities.popup
 
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
+import com.example.loginpageassignment.dataobjects.Location
 import com.example.loginpageassignment.dataobjects.PSB_Event
+import com.example.loginpageassignment.utilities.queue.QueueManager
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 
 class EventsPopup(private val context: Context) : DetailsPopup()
 {
@@ -25,7 +31,7 @@ class EventsPopup(private val context: Context) : DetailsPopup()
         val eventDateTextView = dialogView.findViewById<TextView>(R.id.popupEventDate)
         val eventLocationTextView = dialogView.findViewById<TextView>(R.id.popupEventLocation)
         val eventDescriptionTextView = dialogView.findViewById<TextView>(R.id.popupEventDescription)
-        val viewOnMapButton = dialogView.findViewById<Button>(R.id.popupViewOnMapButton)
+        //val viewOnMapButton = dialogView.findViewById<Button>(R.id.popupViewOnMapButton)
         val addToQueueButton = dialogView.findViewById<Button>(R.id.popupAddToQueueButton)
         val backButton = dialogView.findViewById<Button>(R.id.popupCloseButton)
 
@@ -36,14 +42,24 @@ class EventsPopup(private val context: Context) : DetailsPopup()
         eventLocationTextView.text = event.eventLocation
         eventDescriptionTextView.text = event.eventDescription
 
-        // Button actions
-        viewOnMapButton.setOnClickListener {
-            //TODO: make function
-        }
+//        // Button actions
+//        viewOnMapButton.setOnClickListener {
+//            //TODO: make function
+//        }
 
         addToQueueButton.setOnClickListener {
-            //TODO: lookup location in database, create location object, pass to queue
-            //QueueManager(user.username).addToQueue()
+            val queueManager = QueueManager.getQueueManager(user.username, context)
+            val locationRef = FirebaseFirestore.getInstance().collection("Locations")
+
+            locationRef.whereEqualTo("name", event.eventLocation).get()
+                .addOnSuccessListener { documents ->
+                    val location = documents.map{ doc -> doc.toObject(Location::class.java) }
+                    queueManager?.addToQueue(location[0])
+                    alertDialog?.dismiss()
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("SearchPopup", "Error getting search results", exception)
+                }
         }
 
         backButton.setOnClickListener {
