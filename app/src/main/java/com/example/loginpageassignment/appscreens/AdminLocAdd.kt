@@ -10,6 +10,7 @@ import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
 import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.Locale
 
 class AdminLocAdd : LoggedInPageAdmin()
 {
@@ -103,7 +104,7 @@ class AdminLocAdd : LoggedInPageAdmin()
 
                 } else {
                     //Create location if there are no issues
-                    locRef?.add(Location(iname, lat, long, idesc))?.addOnSuccessListener {
+                    locRef.add(Location(iname, lat, long, idesc)).addOnSuccessListener {
                         val message = "Location added at $lat, $long"
                         showToast(message, this)
                     }
