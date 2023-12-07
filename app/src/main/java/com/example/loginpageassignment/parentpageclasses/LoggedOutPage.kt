@@ -1,13 +1,9 @@
 package com.example.loginpageassignment.parentpageclasses
 
-import android.content.Intent
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import com.example.loginpageassignment.R
-import com.example.loginpageassignment.appscreens.Homepage
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 abstract class LoggedOutPage : Page() {
 

@@ -78,7 +78,7 @@ class ResetPassword : LoggedOutPage()
         getButtonResetFun().setOnClickListener {
             // Validate the username and password
             val iusername = getEditTextUsernameFun().text.toString()
-            var ipassword = getEditTextPasswordFun().text.toString()
+            val ipassword = getEditTextPasswordFun().text.toString()
             val iemail = getEditTextEmailFun().text.toString()
             val iconfirm = getEditTextConfirmPasswordFun().text.toString()
 

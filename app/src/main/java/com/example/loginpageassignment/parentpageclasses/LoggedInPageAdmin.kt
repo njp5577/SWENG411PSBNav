@@ -1,5 +1,3 @@
 package com.example.loginpageassignment.parentpageclasses
 
-abstract class LoggedInPageAdmin : LoggedInPage() {
-
-}
+abstract class LoggedInPageAdmin : LoggedInPage()

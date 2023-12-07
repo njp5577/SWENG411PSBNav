@@ -24,11 +24,6 @@ class SignIn : LoggedOutPage() {
 
     private fun setButtonSignUpFun(buttonSignUp: Button){ this.buttonSignUp = buttonSignUp }
 
-    private fun showInvalidCredentialsMessage(message: String)
-    {
-       showToast(message, this)
-    }
-
     private fun navigateToHomePage(userType: String, username: String) {
         val go: Intent = when (userType) {
             "Admin" -> Intent(this, AdminHome::class.java)
@@ -79,7 +74,7 @@ class SignIn : LoggedOutPage() {
                 val hashed = documents.documents[0].getString("password")
                 if((documents.isEmpty || !BCrypt.checkpw(password, hashed))) //Check that account exists
                 {
-                    showInvalidCredentialsMessage("Invalid username or password.")
+                    showToast("Invalid username or password.", this)
                 }
                 else //if account exists, verify password
                 {

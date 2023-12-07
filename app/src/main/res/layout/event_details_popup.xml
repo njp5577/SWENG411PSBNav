@@ -9,7 +9,7 @@
         android:id="@+id/popupEventImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        />
+        android:contentDescription="@string/event_image" />
 
     <TextView
         android:id="@+id/popupEventName"

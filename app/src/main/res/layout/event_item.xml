@@ -57,5 +57,6 @@
         android:layout_height="125dp"
         android:layout_gravity="end"
         android:layout_marginEnd="3dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/event_image"/>
 </androidx.cardview.widget.CardView>

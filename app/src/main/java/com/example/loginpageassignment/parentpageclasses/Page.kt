@@ -20,11 +20,11 @@ abstract class Page : AppCompatActivity()
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    public fun getButtonBackFun(): Button{
+    fun getButtonBackFun(): Button{
         return this.buttonBack
     }
 
-    public fun setButtonBackFun(buttonBack: Button){
+    fun setButtonBackFun(buttonBack: Button){
         this.buttonBack = buttonBack
     }
 

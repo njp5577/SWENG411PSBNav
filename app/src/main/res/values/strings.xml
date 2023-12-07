@@ -32,4 +32,6 @@
     <string name="submit">Submit</string>
     <string name="home">home</string>
     <string name="refresh">refresh</string>
+    <string name="penn_state_logo">Penn State Logo</string>
+    <string name="event_image">Event image</string>
 </resources>

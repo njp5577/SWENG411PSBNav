@@ -63,7 +63,7 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
         recyclerView = findViewById(R.id.destQueueRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        destQueueAdapter = DestQueueAdapter(getLoggedInAsFun().username, this, this::refresh)
+        destQueueAdapter = DestQueueAdapter(getLoggedInAsFun().username, this)
         recyclerView.adapter = destQueueAdapter
 
         val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -131,7 +131,7 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
     }
 
     // Adapter to bind data to RecyclerView
-    class DestQueueAdapter(username : String, context: Context, refreshCallback: () -> Unit) :
+    class DestQueueAdapter(username : String, context: Context) :
         RecyclerView.Adapter<DestQueueAdapter.ViewHolder>()
     {
         private var destQueueList = mutableListOf<Location>()

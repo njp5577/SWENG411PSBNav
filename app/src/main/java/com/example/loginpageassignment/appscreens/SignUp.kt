@@ -61,7 +61,6 @@ class SignUp : LoggedOutPage()
         val ipassword = getEditTextPasswordFun().text.toString()
         val iemail = editTextEmail.text.toString()
         val iname = editTextName.text.toString()
-        val type = "User"
 
         // Validate user input
         val validationMessages = validateInput(iusername, iemail, ipassword, iname)
@@ -73,7 +72,7 @@ class SignUp : LoggedOutPage()
         }
         else
         {
-            checkEmailExistence(iemail, iusername, ipassword, iname, type)
+            checkEmailExistence(iemail, iusername, ipassword, iname)
         }
     }
 
@@ -124,7 +123,7 @@ class SignUp : LoggedOutPage()
     }
 
     private fun checkEmailExistence(iemail: String, iusername: String,
-                                    ipassword: String, iname: String, type: String)
+                                    ipassword: String, iname: String)
     {
         Log.d("SignUpPage", "check email existence")
         // Check if the email is already associated with an account
@@ -133,7 +132,7 @@ class SignUp : LoggedOutPage()
                 userRef.whereEqualTo("username", iname).get().addOnSuccessListener { documentsTwo ->
                     if(documentsTwo.isEmpty)
                     {
-                        createUserAccount(iemail, iusername, ipassword, iname, type)
+                        createUserAccount(iemail, iusername, ipassword, iname, "User")
                     }
                     else
                     {
