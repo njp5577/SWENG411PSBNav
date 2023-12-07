@@ -37,7 +37,10 @@ class Homepage() : LoggedInPageUser()
 
     override fun refresh()
     {
-        TODO("Not yet implemented")
+        val go = Intent(this, Homepage::class.java)
+        val json = Json.encodeToString(getLoggedInAsFun())
+        go.putExtra("User", json)
+        startActivity(go)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,8 +52,8 @@ class Homepage() : LoggedInPageUser()
         setButtonEventPageFun(findViewById(R.id.buttonEventPage))
         buttonManageEvents = findViewById(R.id.buttonManageEvents)
 
-        var userLogin = intent.getStringExtra("User")
-        var user = Json.decodeFromString<CurrentUser>(userLogin.toString())
+        val userLogin = intent.getStringExtra("User")
+        val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
         Toast.makeText(this, "Hello ${getLoggedInAsFun().username}!", Toast.LENGTH_SHORT).show()
