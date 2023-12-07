@@ -34,15 +34,14 @@ data class DestQueue(var user: String, var list: MutableList<Location>)
 
 /*
 TODO:
-    move up/down button functionality
     possibly extract adapter to its own class and set up generalization relationship with event adapter
 */
-class DestinationQueue : LoggedInPage()
+class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
 {
     private lateinit var recyclerView: RecyclerView
     private lateinit var destQueueAdapter: DestQueueAdapter
     private lateinit var addToQueueButton: Button
-    private var addToQueuePopup = AddToQueuePopup(this)
+    private var addToQueuePopup = AddToQueuePopup(this, this)
 
     override fun refresh()
     {
@@ -187,6 +186,7 @@ class DestinationQueue : LoggedInPage()
                 destCard.findViewById<Button>(R.id.removeButton).setOnClickListener {
                     //grab location from card and pass to function
                     queueManager.removeFromQueue(destData)
+
                 }
 //
 //                destCard.findViewById<Button>(R.id.upButton).setOnClickListener {
@@ -201,4 +201,6 @@ class DestinationQueue : LoggedInPage()
             }
         }
     }
+
+    override fun onPopupDismissed() { refresh() }
 }
