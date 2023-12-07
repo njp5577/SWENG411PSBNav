@@ -4,28 +4,38 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import com.example.loginpageassignment.appscreens.DestinationQueue
 import com.example.loginpageassignment.dataobjects.Location
 import com.google.firebase.firestore.FirebaseFirestore
 
 //Singleton
-//TODO: Fix refresh function after removal
 class QueueManager private constructor(private val username: String, private val context: Context)
 {
     private val queueRef = FirebaseFirestore.getInstance().collection("Queues")
 
     fun addToQueue(location: Location?)
     {
+        if (location == null) return
+
         queueRef.whereEqualTo("user", username).get().addOnSuccessListener { documents ->
             for (document in documents) {
                 val existingLocations = document["list"]
 
-                // Check if "locations" is not null and of the expected type
+                // Check if locations are not null and of the expected type
                 if (existingLocations is MutableList<*> && existingLocations.all { it is Map<*, *> }) {
                     val locationList = existingLocations as MutableList<Map<String, Any>>
 
-                    // If "locations" exists, add the new location to it
-                    if (location != null)
+                    // Check if the location already exists in the list
+                    if (locationList.any {
+                            it["name"] == location.name &&
+                            it["desc"] == location.desc &&
+                            it["latitude"] == location.latitude &&
+                            it["longitude"] == location.longitude })
+                    {
+                        Toast.makeText(context, "Location already exists within queue", Toast.LENGTH_SHORT).show()
+                    }
+                    else // Add new location
                     {
                         locationList.add(
                             mapOf(
@@ -34,16 +44,16 @@ class QueueManager private constructor(private val username: String, private val
                                 "latitude" to location.latitude,
                                 "longitude" to location.longitude
                             ))
-                    }
 
-                    // Update the document with the new location
-                    queueRef.document(document.id).update("list", existingLocations)
-                        .addOnSuccessListener {
-                            Log.d("Queue", "Location added to the queue")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.e("Queue", "Error updating document", e)
-                        }
+                        // Update the document with the new location
+                        queueRef.document(document.id).update("list", existingLocations)
+                            .addOnSuccessListener {
+                                Log.d("Queue", "Queue Updated")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("Queue", "Error updating document", e)
+                            }
+                    }
                 }
             }
         }
