@@ -9,9 +9,12 @@ import com.example.loginpageassignment.R
 import com.example.loginpageassignment.parentpageclasses.LoggedOutPage
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.mindrot.jbcrypt.BCrypt
 
-class ResetPassword : LoggedOutPage() {
+class ResetPassword : LoggedOutPage()
+{
 
     private lateinit var editTextConfirmPassword: EditText
     private lateinit var editTextEmail: EditText
@@ -51,6 +54,8 @@ class ResetPassword : LoggedOutPage() {
             }
         }
     }
+
+    override fun refresh() { startActivity(Intent(this, ResetPassword::class.java)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

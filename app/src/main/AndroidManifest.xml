@@ -23,21 +23,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".appscreens.SignUp"></activity>
-        <activity android:name=".appscreens.Homepage"></activity>
-        <activity android:name=".appscreens.ResetPassword"></activity>
-        <activity android:name=".appscreens.DestinationQueue"></activity>
-        <activity android:name=".appscreens.EventPage"></activity>
-        <activity android:name=".appscreens.MapPage"></activity>
-
-        <activity android:name=".appscreens.EventOrgManageEvents"></activity>
-
-        <activity android:name=".appscreens.AdminHome"></activity>
-        <activity android:name=".appscreens.AdminLocAdd"></activity>
-        <activity android:name=".appscreens.AdminLocDelete"></activity>
-        <activity android:name=".appscreens.AdminUserDelete"></activity>
-        <activity android:name=".appscreens.AdminAddAdmin"></activity>
-        <activity android:name=".appscreens.AdminAddEventOrg"></activity>
+        <activity android:name=".appscreens.SignUp"/>
+        <activity android:name=".appscreens.Homepage" android:label="@string/home"/>
+        <activity android:name=".appscreens.ResetPassword"/>
+        <activity android:name=".appscreens.DestinationQueue"/>
+        <activity android:name=".appscreens.EventPage"/>
+        <activity android:name=".appscreens.MapPage"/>
+        <activity android:name=".appscreens.EventOrgManageEvents"/>
+        <activity android:name=".appscreens.AdminHome"/>
+        <activity android:name=".appscreens.AdminLocAdd"/>
+        <activity android:name=".appscreens.AdminLocDelete"/>
+        <activity android:name=".appscreens.AdminUserDelete"/>
+        <activity android:name=".appscreens.AdminAddAdmin"/>
+        <activity android:name=".appscreens.AdminAddEventOrg"/>
     </application>
 
 </manifest>

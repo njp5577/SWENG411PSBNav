@@ -9,6 +9,7 @@ import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class AdminAddEventOrg : LoggedInPageAdmin() {
@@ -18,6 +19,14 @@ class AdminAddEventOrg : LoggedInPageAdmin() {
 
     // Reference to the "Users" collection in Firestore
     private val userRef = FirebaseFirestore.getInstance().collection("Users")
+
+    override fun refresh()
+    {
+        val go = Intent(this, AdminAddEventOrg::class.java)
+        val json = Json.encodeToString(getLoggedInAsFun())
+        go.putExtra("User", json)
+        startActivity(go)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

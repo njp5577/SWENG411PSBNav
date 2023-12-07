@@ -50,6 +50,7 @@ class SignIn : LoggedOutPage() {
         startActivity(go)
     }
 
+    override fun refresh() { startActivity(Intent(this, SignIn::class.java)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

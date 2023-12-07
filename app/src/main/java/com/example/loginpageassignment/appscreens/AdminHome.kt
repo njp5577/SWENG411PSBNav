@@ -25,6 +25,14 @@ class AdminHome : LoggedInPageAdmin() {
         this.buttonAddLoc = buttonAddLoc
     }
 
+    override fun refresh()
+    {
+        val go = Intent(this, AdminHome::class.java)
+        val json = Json.encodeToString(getLoggedInAsFun())
+        go.putExtra("User", json)
+        startActivity(go)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adminhome)

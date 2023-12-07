@@ -1,13 +1,21 @@
 package com.example.loginpageassignment.parentpageclasses
 
+import android.content.Intent
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import com.example.loginpageassignment.R
+import com.example.loginpageassignment.appscreens.Homepage
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 abstract class LoggedOutPage : Page() {
 
-    protected lateinit var buttonLogin: Button
-    protected lateinit var editTextUsername: EditText
-    protected lateinit var editTextPassword: EditText
+    private lateinit var buttonLogin: Button
+    private lateinit var editTextUsername: EditText
+    private lateinit var editTextPassword: EditText
+
+    abstract override fun refresh()
 
     protected fun getButtonLoginFun(): Button{
         return this.buttonLogin
@@ -31,5 +39,18 @@ abstract class LoggedOutPage : Page() {
 
     protected fun setEditTextPasswordFun(editTextPassword: EditText){
         this.editTextPassword = editTextPassword
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean
+    {
+        return when (item.itemId)
+        {
+            R.id.refresh -> {
+                refresh()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
