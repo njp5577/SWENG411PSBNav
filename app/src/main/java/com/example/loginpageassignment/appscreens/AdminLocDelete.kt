@@ -6,7 +6,7 @@ import android.widget.EditText
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -18,7 +18,7 @@ class AdminLocDelete: LoggedInPageAdmin()
     private lateinit var buttonDelete: Button
 
     // Reference to the "Users" collection in Firestore
-    private val locRef = FirebaseFirestore.getInstance().collection("Locations")
+    private val locRef = DatabaseManager.getDatabaseManager()?.getLocationRef()
 
     override fun refresh()
     {
@@ -49,24 +49,20 @@ class AdminLocDelete: LoggedInPageAdmin()
         buttonDelete = findViewById(R.id.buttonDelete)
     }
 
-    private fun handleDeleteUser(){
+    private fun handleDeleteUser()
+    {
         val iname = editTextName.text.toString()
 
         //Check all users to look for a match
-        locRef.whereEqualTo("name", iname).get().addOnSuccessListener{ documents ->
+        locRef?.whereEqualTo("name", iname)?.get()?.addOnSuccessListener{ documents ->
             //Check if incorrect credentials
-            if (documents.isEmpty)
-            {
-                showToast("No location under this name.", this)
-            }
-            else
-            {
-                deleteLoc(documents)
-            }
+            if (documents.isEmpty) showToast("No location under this name.", this)
+            else deleteLoc(documents)
         }
     }
 
-    private fun deleteLoc(documents : QuerySnapshot){
+    private fun deleteLoc(documents : QuerySnapshot)
+    {
         documents.documents[0].reference.delete().addOnSuccessListener {
             showToast("The location under this name has been deleted.", this)
         }

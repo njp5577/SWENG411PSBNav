@@ -6,7 +6,7 @@ import android.widget.EditText
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -18,7 +18,7 @@ class AdminAddAdmin : LoggedInPageAdmin()
     private lateinit var buttonAdmin: Button
 
     // Reference to the "Users" collection in Firestore
-    private val userRef = FirebaseFirestore.getInstance().collection("Users")
+    private val userRef = DatabaseManager.getDatabaseManager()?.getUserRef()
 
     override fun refresh()
     {
@@ -54,14 +54,11 @@ class AdminAddAdmin : LoggedInPageAdmin()
         val iemail = editTextEmail.text.toString()
 
         //Check all users to look for a match
-        userRef.whereEqualTo("email", iemail).get().addOnSuccessListener{ documents ->
+        userRef?.whereEqualTo("email", iemail)?.get()?.addOnSuccessListener{ documents ->
             //Check if incorrect credentials
-            if (documents.isEmpty)
-            {
+            if (documents.isEmpty) {
                 showToast("No account under that email.", this)
-            }
-            else
-            {
+            } else {
                 changeToEventOrg(documents)
             }
         }

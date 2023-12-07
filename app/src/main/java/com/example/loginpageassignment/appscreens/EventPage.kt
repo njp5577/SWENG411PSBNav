@@ -14,8 +14,8 @@ import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPage
 import com.example.loginpageassignment.dataobjects.PSB_Event
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import com.example.loginpageassignment.utilities.popup.EventsPopup
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -23,7 +23,7 @@ class EventPage : LoggedInPage()
 {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
-    private val eventRef = FirebaseFirestore.getInstance().collection("Events")
+    private val eventRef = DatabaseManager.getDatabaseManager()?.getEventRef()
     private val events = mutableListOf<PSB_Event>()
     private val eventsPopup = EventsPopup(this)
     private var limit = 5 // Initial limit
@@ -119,7 +119,7 @@ class EventPage : LoggedInPage()
     private fun loadData()
     {
         loading = true
-        eventRef.limit(limit.toLong()).get().addOnSuccessListener{ documents ->
+        eventRef?.limit(limit.toLong())?.get()?.addOnSuccessListener{ documents ->
             Log.d("EventPage", "Document count: ${documents.size()}")
             val newPSBEvents = mutableListOf<PSB_Event>()
 
@@ -133,7 +133,7 @@ class EventPage : LoggedInPage()
             newPSBEvents.sortWith(compareBy({ it.eventDate }, { it.eventTime }))
             loading = false
             updateAdapterData(newPSBEvents)
-        }.addOnFailureListener{
+        }?.addOnFailureListener{
             loading = false
             Log.e("EventPage", "Error loading data: $it")
         }

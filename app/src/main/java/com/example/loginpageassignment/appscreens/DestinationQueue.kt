@@ -19,9 +19,9 @@ import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.Location
 import com.example.loginpageassignment.dataobjects.PSB_Event
 import com.example.loginpageassignment.parentpageclasses.LoggedInPage
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import com.example.loginpageassignment.utilities.popup.AddToQueuePopup
-import com.example.loginpageassignment.utilities.queue.QueueManager
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.QueueManager
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -66,8 +66,7 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
         destQueueAdapter = DestQueueAdapter(getLoggedInAsFun().username, this)
         recyclerView.adapter = destQueueAdapter
 
-        val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val queueRef = firestore.collection("Queues")
+        val queueRef = DatabaseManager.getDatabaseManager()?.getQueueRef()
 
         addToQueueButton = findViewById(R.id.addToQueueButton)
         addToQueueButton.setOnClickListener {
@@ -75,7 +74,7 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
             addToQueuePopup.showDetails(PSB_Event(), getLoggedInAsFun())
         }
 
-        queueRef.get().addOnSuccessListener { documents ->
+        queueRef?.get()?.addOnSuccessListener { documents ->
             if (documents.isEmpty)
             {
                 // Handle the case where there's no data in the database
@@ -91,7 +90,6 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
                     if (document.getString("user") == getLoggedInAsFun().username)
                     {
                         val list = mutableListOf<Location>()
-
                         val rawList = document["list"] as ArrayList<HashMap<String, Any>>?
 
                         rawList?.forEach { locationMap ->
@@ -113,18 +111,13 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
                 if (destQueueList.isNotEmpty())
                 {
                     if (destQueueList[0].list.isNotEmpty())
-                    {
                         destQueueAdapter.setData(destQueueList[0].list)
-                    }
                     else
-                    {
                         showToast("No destinations in queue", this)
-                    }
-                } else {
-                    Log.d("DestQueuePage", "Error retrieving queue")
                 }
+                else Log.d("DestQueuePage", "Error retrieving queue")
             }
-        }.addOnFailureListener{
+        }?.addOnFailureListener{
             // Handle the failure to retrieve data from the database
             Log.d("DestQueuePage", "Error loading data: $it")
         }
@@ -163,10 +156,7 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
             }
         }
 
-        override fun getItemCount(): Int
-        {
-            return destQueueList.size
-        }
+        override fun getItemCount(): Int { return destQueueList.size }
 
         private fun getItem(position: Int, queue: MutableList<Location>): Location
         {

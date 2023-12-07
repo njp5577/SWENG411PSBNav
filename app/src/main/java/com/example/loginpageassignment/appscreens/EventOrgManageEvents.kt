@@ -8,7 +8,7 @@ import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.PSB_Event
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageEventOrg
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -22,7 +22,7 @@ class EventOrgManageEvents : LoggedInPageEventOrg()
     private lateinit var editTextDescription: EditText
     private lateinit var buttonEvent: Button
 
-    private val eventRef = FirebaseFirestore.getInstance().collection("Events")
+    private val eventRef = DatabaseManager.getDatabaseManager()?.getEventRef()
 
     override fun refresh()
     {
@@ -57,7 +57,8 @@ class EventOrgManageEvents : LoggedInPageEventOrg()
         buttonEvent = findViewById(R.id.buttonEvent)
     }
 
-    private fun handleEventAdd(){
+    private fun handleEventAdd()
+    {
         val iname = editTextName.text.toString()
         val ilocation = editTextLocation.text.toString()
         val idate = editTextDate.text.toString()
@@ -75,17 +76,16 @@ class EventOrgManageEvents : LoggedInPageEventOrg()
         }
         else
         {
-            eventRef.add(PSB_Event(iname, ilocation, idate, itime, idescription)).addOnSuccessListener {
-                val message = "Event added with name: $iname"
-                showToast(message, this)
-                editTextName.setText("")
-                editTextLocation.setText("")
-                editTextDate.setText("")
-                editTextTime.setText("")
-                editTextDescription.setText("")
-            }
+            eventRef?.add(PSB_Event(iname, ilocation, idate, itime, idescription))
+                ?.addOnSuccessListener {
+                    val message = "Event added with name: $iname"
+                    showToast(message, this)
+                    editTextName.setText("")
+                    editTextLocation.setText("")
+                    editTextDate.setText("")
+                    editTextTime.setText("")
+                    editTextDescription.setText("")
+                }
         }
     }
-
-
 }
