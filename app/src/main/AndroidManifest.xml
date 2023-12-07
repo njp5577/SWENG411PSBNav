@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".appscreens.SignUp"/>
-        <activity android:name=".appscreens.Homepage" android:label="@string/home"/>
+        <activity android:name=".appscreens.Homepage"/>
         <activity android:name=".appscreens.ResetPassword"/>
         <activity android:name=".appscreens.DestinationQueue"/>
         <activity android:name=".appscreens.EventPage"/>
