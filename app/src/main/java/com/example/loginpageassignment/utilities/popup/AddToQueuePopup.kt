@@ -3,6 +3,7 @@ package com.example.loginpageassignment.utilities.popup
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.os.SystemClock.sleep
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -30,8 +31,11 @@ data class SearchResult(
     constructor() : this("", 0.0, 0.0, "")
 }
 //TODO: Add page refresh after popup disappears
-class AddToQueuePopup(private val context: Context) : DetailsPopup()
+class AddToQueuePopup(private val context: Context,
+                      private val dismissCallback: PopupDismissCallback) : DetailsPopup()
 {
+    interface PopupDismissCallback { fun onPopupDismissed() }
+
     private var alertDialog: AlertDialog? = null
 
     override fun showDetails(event: PSB_Event, user: CurrentUser)
@@ -46,7 +50,7 @@ class AddToQueuePopup(private val context: Context) : DetailsPopup()
         val searchRecyclerView = dialogView.findViewById<RecyclerView>(R.id.searchRecyclerView)
 
         // Set up RecyclerView with an empty list initially
-        val searchAdapter = SearchAdapter(context, user.username, emptyList()) { alertDialog?.dismiss()}
+        val searchAdapter = SearchAdapter(context, user.username, emptyList(), dismissCallback)
         searchRecyclerView.layoutManager = LinearLayoutManager(context)
         searchRecyclerView.adapter = searchAdapter
 
@@ -78,16 +82,16 @@ class AddToQueuePopup(private val context: Context) : DetailsPopup()
         }
 
         val dialog = dialogBuilder.create()
+        dialog.setOnDismissListener { dismissCallback.onPopupDismissed() }
         dialog.show()
         alertDialog = dialog
     }
 
     class SearchAdapter(
         private val context: Context,
-        private var username : String,
-        private var searchResults : List<SearchResult>,
-        private val dismissCallback: () -> Unit) :
-        RecyclerView.Adapter<SearchAdapter.ViewHolder>()
+        private var username: String,
+        private var searchResults: List<SearchResult>,
+        private val dismissCallback: PopupDismissCallback) : RecyclerView.Adapter<SearchAdapter.ViewHolder>()
     {
         inner class ViewHolder(itemView :View) : RecyclerView.ViewHolder(itemView){}
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.ViewHolder
@@ -116,8 +120,8 @@ class AddToQueuePopup(private val context: Context) : DetailsPopup()
                         result.latitude,
                         result.longitude,
                         result.desc))
-
-                dismissCallback.invoke();
+                sleep(500) //sleeps for 500ms to ensure destination added to queue
+                dismissCallback.onPopupDismissed()
             }
         }
 
