@@ -9,7 +9,7 @@ import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.Location
 import com.example.loginpageassignment.dataobjects.User
 import com.example.loginpageassignment.parentpageclasses.LoggedOutPage
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import org.mindrot.jbcrypt.BCrypt
 
 class SignUp : LoggedOutPage()
@@ -19,7 +19,7 @@ class SignUp : LoggedOutPage()
     private lateinit var buttonRegister: Button
 
     // Reference to the "Users" collection in Firestore
-    private val userRef = FirebaseFirestore.getInstance().collection("Users")
+    private val userRef = DatabaseManager.getDatabaseManager()?.getUserRef()
 
     override fun refresh() { startActivity(Intent(this, SignUp::class.java)) }
 
@@ -116,9 +116,7 @@ class SignUp : LoggedOutPage()
         Log.d("SignUpPage", "display validation messages")
         // Display validation messages as toasts
         validationMessages.forEach { (condition, message) ->
-            if (condition) {
-                showToast(message, this)
-            }
+            if (condition) { showToast(message, this) }
         }
     }
 
@@ -127,34 +125,31 @@ class SignUp : LoggedOutPage()
     {
         Log.d("SignUpPage", "check email existence")
         // Check if the email is already associated with an account
-        userRef.whereEqualTo("email", iemail).get().addOnSuccessListener { documents ->
+        userRef?.whereEqualTo("email", iemail)?.get()?.addOnSuccessListener { documents ->
             if (documents.isEmpty)
-                userRef.whereEqualTo("username", iname).get().addOnSuccessListener { documentsTwo ->
-                    if(documentsTwo.isEmpty)
-                    {
-                        createUserAccount(iemail, iusername, ipassword, iname, "User")
+                userRef?.whereEqualTo("username", iname)?.get()
+                    ?.addOnSuccessListener { documentsTwo ->
+                        if(documentsTwo.isEmpty)
+                            createUserAccount(iemail, iusername, ipassword, iname)
+                        else
+                            showToast("An account is already under that username.", this)
                     }
-                    else
-                    {
-                        showToast("An account is already under that username.", this)
-                    }
-                }
             else showToast("An account is already under that email.", this)
         }
     }
 
     private fun createUserAccount(iemail: String, iusername: String,
-                                  ipassword: String, iname: String, type: String)
+                                  ipassword: String, iname: String)
     {
         Log.d("SignUpPage", "create user account")
         // Hash password
         val hashed = BCrypt.hashpw(ipassword, BCrypt.gensalt())
 
-        userRef.add(User(iname, iemail, iusername, hashed, type)).addOnSuccessListener {
-            val queueRef = FirebaseFirestore.getInstance().collection("Queues")
+        userRef?.add(User(iname, iemail, iusername, hashed, "User"))?.addOnSuccessListener {
+            val queueRef = DatabaseManager.getDatabaseManager()?.getQueueRef()
             val queue = mutableListOf<Location>()
 
-            queueRef.add(DestQueue(iusername, queue)).addOnSuccessListener{
+            queueRef?.add(DestQueue(iusername, queue))?.addOnSuccessListener{
                 Log.d("SignUpPage", "Made empty queue")
             }
 

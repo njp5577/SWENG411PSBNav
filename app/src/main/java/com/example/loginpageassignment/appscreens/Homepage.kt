@@ -6,21 +6,20 @@ import android.widget.Button
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageUser
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 
 class Homepage() : LoggedInPageUser()
 {
-
     private lateinit var buttonMapPage: Button
     private lateinit var buttonDestinationQueue: Button
     private lateinit var buttonEventPage: Button
     private lateinit var buttonManageEvents: Button
 
     // Reference to the "Users" collection in Firestore
-    private val userRef = FirebaseFirestore.getInstance().collection("Users")
+    private val userRef = DatabaseManager.getDatabaseManager()?.getUserRef()
 
     private fun getButtonMapPageFun() : Button { return this.buttonMapPage }
 
@@ -42,7 +41,8 @@ class Homepage() : LoggedInPageUser()
         startActivity(go)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
@@ -79,20 +79,20 @@ class Homepage() : LoggedInPageUser()
         }
 
         buttonManageEvents.setOnClickListener {
-            userRef.whereEqualTo("username", getLoggedInAsFun().username).get()
-                .addOnSuccessListener { documents ->
-                if(documents.documents[0].getString("type") == "EventOrg")
-                {
-                    val go = Intent(this, EventOrgManageEvents::class.java)
-                    val json = Json.encodeToString(getLoggedInAsFun())
-                    go.putExtra("User", json)
-                    startActivity(go)
+            userRef?.whereEqualTo("username", getLoggedInAsFun().username)?.get()
+                ?.addOnSuccessListener { documents ->
+                    if(documents.documents[0].getString("type") == "EventOrg")
+                    {
+                        val go = Intent(this, EventOrgManageEvents::class.java)
+                        val json = Json.encodeToString(getLoggedInAsFun())
+                        go.putExtra("User", json)
+                        startActivity(go)
+                    }
+                    else
+                    {
+                        showToast("You must be an event organizer to access this page.", this)
+                    }
                 }
-                else
-                {
-                    showToast("You must be an event organizer to access this page.", this)
-                }
-            }
         }
     }
 }

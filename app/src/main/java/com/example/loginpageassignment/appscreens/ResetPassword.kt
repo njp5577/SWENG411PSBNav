@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.parentpageclasses.LoggedOutPage
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import com.google.firebase.firestore.QuerySnapshot
 import org.mindrot.jbcrypt.BCrypt
 
@@ -17,34 +17,25 @@ class ResetPassword : LoggedOutPage()
     private lateinit var editTextEmail: EditText
     private lateinit var buttonReset: Button
 
-    private fun getEditTextConfirmPasswordFun() : EditText{
-        return this.editTextConfirmPassword
-    }
+    private fun getEditTextConfirmPasswordFun() : EditText{ return this.editTextConfirmPassword }
 
-    private fun setEditTextConfirmPasswordFun(editTextConfirmPassword: EditText){
-        this.editTextConfirmPassword = editTextConfirmPassword
-    }
+    private fun setEditTextConfirmPasswordFun(editTextConfirmPassword: EditText){ this.editTextConfirmPassword = editTextConfirmPassword }
 
-    private fun getEditTextEmailFun() : EditText{
-        return this.editTextEmail
-    }
+    private fun getEditTextEmailFun() : EditText{ return this.editTextEmail }
 
-    private fun setEditTextEmailFun(editTextEmail: EditText){
-        this.editTextEmail = editTextEmail
-    }
+    private fun setEditTextEmailFun(editTextEmail: EditText){ this.editTextEmail = editTextEmail }
 
-    private fun getButtonResetFun(): Button{
-        return this.buttonReset
-    }
+    private fun getButtonResetFun(): Button{ return this.buttonReset }
 
-    private fun setButtonResetFun(buttonReset: Button){
-        this.buttonReset = buttonReset
-    }
+    private fun setButtonResetFun(buttonReset: Button){ this.buttonReset = buttonReset }
 
-    private fun resetPassword(documents: QuerySnapshot, ipassword: String, iconfirm: String) {
-        if (ipassword == iconfirm && ipassword.length > 4) {
+    private fun resetPassword(documents: QuerySnapshot, ipassword: String, iconfirm: String)
+    {
+        if (ipassword == iconfirm && ipassword.length > 4)
+        {
             val hashedPassword = BCrypt.hashpw(ipassword, BCrypt.gensalt())
-            documents.documents[0].reference.update("password", hashedPassword).addOnSuccessListener {
+            documents.documents[0].reference.update("password", hashedPassword)
+                .addOnSuccessListener {
                 showToast("Password has been reset.", this)
                 // Go to login screen
                 startActivity(Intent(this, SignIn::class.java))
@@ -54,12 +45,12 @@ class ResetPassword : LoggedOutPage()
 
     override fun refresh() { startActivity(Intent(this, ResetPassword::class.java)) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset)
 
-        val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val userRef = firestore.collection("Users")
+        val userRef = DatabaseManager.getDatabaseManager()?.getUserRef()
 
         setEditTextUsernameFun(findViewById(R.id.editTextUsername))
         setEditTextPasswordFun(findViewById(R.id.editTextPassword))
@@ -83,17 +74,15 @@ class ResetPassword : LoggedOutPage()
             val iconfirm = getEditTextConfirmPasswordFun().text.toString()
 
             //Check all users to look for a match
-            userRef.whereEqualTo("username", iusername).whereEqualTo("email", iemail).get().addOnSuccessListener{ documents ->
-                //Check if incorrect credentials
-                if (documents.isEmpty)
-                {
-                    showToast("Invalid username or email.", this)
+            userRef?.whereEqualTo("username", iusername)?.whereEqualTo("email", iemail)
+                ?.get()?.addOnSuccessListener{ documents ->
+                    //Check if incorrect credentials
+                    if (documents.isEmpty) {
+                        showToast("Invalid username or email.", this)
+                    } else {
+                        resetPassword(documents, ipassword, iconfirm)
+                    }
                 }
-                else
-                {
-                    resetPassword(documents, ipassword, iconfirm)
-                }
-            }
         }
     }
 }

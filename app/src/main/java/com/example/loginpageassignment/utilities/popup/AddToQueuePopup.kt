@@ -17,8 +17,9 @@ import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.Location
 import com.example.loginpageassignment.dataobjects.PSB_Event
-import com.example.loginpageassignment.utilities.queue.QueueManager
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
+import com.example.loginpageassignment.utilities.managers.QueueManager
+
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -30,7 +31,7 @@ data class SearchResult(
 {
     constructor() : this("", 0.0, 0.0, "")
 }
-//TODO: Add page refresh after popup disappears
+
 class AddToQueuePopup(private val context: Context,
                       private val dismissCallback: PopupDismissCallback) : DetailsPopup()
 {
@@ -55,21 +56,21 @@ class AddToQueuePopup(private val context: Context,
         searchRecyclerView.adapter = searchAdapter
 
         // Set up Firebase query listener for search
-        val locationRef = FirebaseFirestore.getInstance().collection("Locations")
+        val locationRef = DatabaseManager.getDatabaseManager()?.getLocationRef()
 
         searchSubmitButton.setOnClickListener {
             val query = searchEditText.text.toString().trim()
             if (query.isNotEmpty())
             {
-                locationRef.whereEqualTo("name", query).get()
-                    .addOnSuccessListener { documents ->
+                locationRef?.whereEqualTo("name", query)?.get()
+                    ?.addOnSuccessListener { documents ->
                         val searchResults = documents.map{
                                 doc -> doc.toObject(SearchResult::class.java)
                         }
                         searchAdapter.setData(searchResults)
                         searchRecyclerView.visibility = View.VISIBLE
                     }
-                    .addOnFailureListener { exception ->
+                    ?.addOnFailureListener { exception ->
                         Log.e("SearchPopup", "Error getting search results", exception)
                     }
             }

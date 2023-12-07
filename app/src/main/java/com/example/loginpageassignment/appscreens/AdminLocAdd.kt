@@ -7,7 +7,7 @@ import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.Location
 import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -47,7 +47,8 @@ class AdminLocAdd : LoggedInPageAdmin()
         startActivity(go)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adminlocadd)
 
@@ -57,16 +58,13 @@ class AdminLocAdd : LoggedInPageAdmin()
         setEditTextDescFun(findViewById(R.id.editTextDesc))
         setButtonAddLocFun(findViewById(R.id.buttonAddLoc))
 
-        var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-        val locRef = firestore.collection("Locations")
+        val locRef = DatabaseManager.getDatabaseManager()?.getLocationRef()
 
         val userLogin = intent.getStringExtra("User")
         val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
         buttonAddLoc.setOnClickListener {
-
             val iname = getEditTextNameFun().text.toString()
             val ilat = getEditTextLatitudeFun().text.toString()
             val ilong = getEditTextLongitudeFun().text.toString()
@@ -98,17 +96,14 @@ class AdminLocAdd : LoggedInPageAdmin()
                 return@setOnClickListener
             }
 
-            locRef.whereEqualTo("name", iname).get().addOnSuccessListener{ documents ->
+            locRef?.whereEqualTo("name", iname)?.get()?.addOnSuccessListener{ documents ->
                 //Check that location does not already exist
-                if (!(documents.isEmpty))
-                {
+                if (!(documents.isEmpty)) {
                     showToast("A location with this name already exists.", this)
 
-                }
-                else
-                {
+                } else {
                     //Create location if there are no issues
-                    locRef.add(Location(iname, lat, long, idesc)).addOnSuccessListener {
+                    locRef?.add(Location(iname, lat, long, idesc))?.addOnSuccessListener {
                         val message = "Location added at $lat, $long"
                         showToast(message, this)
                     }

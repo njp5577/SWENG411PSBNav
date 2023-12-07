@@ -10,8 +10,8 @@ import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.Location
 import com.example.loginpageassignment.dataobjects.PSB_Event
-import com.example.loginpageassignment.utilities.queue.QueueManager
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.loginpageassignment.utilities.managers.DatabaseManager
+import com.example.loginpageassignment.utilities.managers.QueueManager
 
 class EventsPopup(private val context: Context) : DetailsPopup()
 {
@@ -40,29 +40,23 @@ class EventsPopup(private val context: Context) : DetailsPopup()
         eventLocationTextView.text = event.eventLocation
         eventDescriptionTextView.text = event.eventDescription
 
-//        // Button actions
-//        viewOnMapButton.setOnClickListener {
-//            //TODO: make function
-//        }
+        //viewOnMapButton.setOnClickListener { }
 
         addToQueueButton.setOnClickListener {
             val queueManager = QueueManager.getQueueManager(user.username, context)
-            val locationRef = FirebaseFirestore.getInstance().collection("Locations")
+            val locationRef = DatabaseManager.getDatabaseManager()?.getLocationRef()
 
-            locationRef.whereEqualTo("name", event.eventLocation).get()
-                .addOnSuccessListener { documents ->
+            locationRef?.whereEqualTo("name", event.eventLocation)?.get()
+                ?.addOnSuccessListener { documents ->
                     val location = documents.map{ doc -> doc.toObject(Location::class.java) }
                     queueManager?.addToQueue(location[0])
                     alertDialog?.dismiss()
-                }
-                .addOnFailureListener { exception ->
-                    Log.e("SearchPopup", "Error getting search results", exception)
-                }
+                }?.addOnFailureListener { exception ->
+                Log.e("SearchPopup", "Error getting search results", exception)
+            }
         }
 
-        backButton.setOnClickListener {
-            alertDialog?.dismiss()
-        }
+        backButton.setOnClickListener { alertDialog?.dismiss() }
 
         val dialog = dialogBuilder.create()
         dialog.show()
