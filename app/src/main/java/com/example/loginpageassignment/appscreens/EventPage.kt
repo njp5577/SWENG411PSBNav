@@ -19,6 +19,7 @@ import com.example.loginpageassignment.utilities.popup.EventsPopup
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+//controller for the event page
 class EventPage : LoggedInPage()
 {
     private lateinit var recyclerView: RecyclerView
@@ -29,6 +30,7 @@ class EventPage : LoggedInPage()
     private var limit = 5 // Initial limit
     private var loading = false
 
+    //refreshes the current page
     override fun refresh()
     {
         val go = Intent(this, EventPage::class.java)
@@ -37,6 +39,7 @@ class EventPage : LoggedInPage()
         startActivity(go)
     }
 
+    //when the activity is created
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
