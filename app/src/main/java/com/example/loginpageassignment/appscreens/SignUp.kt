@@ -12,6 +12,7 @@ import com.example.loginpageassignment.parentpageclasses.LoggedOutPage
 import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import org.mindrot.jbcrypt.BCrypt
 
+// Controller for the sign up page
 class SignUp : LoggedOutPage()
 {
     private lateinit var editTextEmail: EditText
@@ -21,11 +22,13 @@ class SignUp : LoggedOutPage()
     // Reference to the "Users" collection in Firestore
     private val userRef = DatabaseManager.getDatabaseManager()?.getUserRef()
 
+    //refreshes current page
     override fun refresh() { startActivity(Intent(this, SignUp::class.java)) }
 
+    //on activity create
     override fun onCreate(savedInstanceState: Bundle?)
     {
-        Log.d("SignUpPage", "on create")
+        //Log.d("SignUpPage", "on create")
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -33,15 +36,18 @@ class SignUp : LoggedOutPage()
         initializeViews()
 
         //When user wants to go back to sign in page
-        getButtonLoginFun().setOnClickListener { startActivity(Intent(this, SignIn::class.java)) }
+        getButtonLoginFun().setOnClickListener {
+            startActivity(Intent(this, SignIn::class.java))
+        }
 
         //When user wants to sign up
         buttonRegister.setOnClickListener { handleSignUp() }
     }
 
+    //initializes the variables referencing ui components
     private fun initializeViews()
     {
-        Log.d("SignUpPage", "initialize views")
+        //Log.d("SignUpPage", "initialize views")
 
         // Initialize UI components
         editTextEmail = findViewById(R.id.editTextEmail)
@@ -52,9 +58,10 @@ class SignUp : LoggedOutPage()
         setButtonLoginFun(findViewById(R.id.buttonLogin))
     }
 
+    //gathers input related to sign up
     private fun handleSignUp()
     {
-        Log.d("SignUpPage", "handle signup")
+        //Log.d("SignUpPage", "handle signup")
 
         // Get input values
         val iusername = getEditTextUsernameFun().text.toString()
@@ -76,6 +83,7 @@ class SignUp : LoggedOutPage()
         }
     }
 
+    //validates user input
     private fun validateInput(iusername: String, iemail: String,
                               ipassword: String, iname: String): List<Pair<Boolean, String>>
     {
@@ -111,6 +119,7 @@ class SignUp : LoggedOutPage()
         return validationResults
     }
 
+    //displays messages related to user input
     private fun displayValidationMessages(validationMessages: List<Pair<Boolean, String>>)
     {
         Log.d("SignUpPage", "display validation messages")
@@ -120,24 +129,30 @@ class SignUp : LoggedOutPage()
         }
     }
 
+    //checks if email is already stored in database
     private fun checkEmailExistence(iemail: String, iusername: String,
                                     ipassword: String, iname: String)
     {
         Log.d("SignUpPage", "check email existence")
         // Check if the email is already associated with an account
         userRef?.whereEqualTo("email", iemail)?.get()?.addOnSuccessListener { documents ->
-            if (documents.isEmpty)
-                userRef?.whereEqualTo("username", iname)?.get()
-                    ?.addOnSuccessListener { documentsTwo ->
-                        if(documentsTwo.isEmpty)
-                            createUserAccount(iemail, iusername, ipassword, iname)
-                        else
-                            showToast("An account is already under that username.", this)
-                    }
+            if (documents.isEmpty) checkUsernameExistence(iemail, iusername, ipassword, iname)
             else showToast("An account is already under that email.", this)
         }
     }
 
+    //checks if username exists in database
+    private fun checkUsernameExistence(iemail: String, iusername: String,
+                                       ipassword: String, iname: String)
+    {
+        userRef?.whereEqualTo("username", iusername)?.get()
+            ?.addOnSuccessListener { documents ->
+                if(documents.isEmpty) createUserAccount(iemail, iusername, ipassword, iname)
+                else showToast("An account is already under that username.", this)
+            }
+    }
+
+    //create an account for the user and store it in the database
     private fun createUserAccount(iemail: String, iusername: String,
                                   ipassword: String, iname: String)
     {

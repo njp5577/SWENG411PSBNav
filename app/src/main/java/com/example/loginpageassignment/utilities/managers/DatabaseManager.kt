@@ -4,10 +4,9 @@ import android.annotation.SuppressLint
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
-//Singleton
+//Singleton class to manage all database collection references
 class DatabaseManager
 {
-
     private val database = FirebaseFirestore.getInstance()
     private val userRef = database.collection("Users");
     private val locationRef = database.collection("Locations");

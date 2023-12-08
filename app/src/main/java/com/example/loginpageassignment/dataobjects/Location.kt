@@ -2,6 +2,7 @@
 package com.example.loginpageassignment.dataobjects
 import kotlinx.serialization.Serializable
 
+//Serializable object that matches the location entry in the database
 @Serializable
 data class Location(
     val name: String = "",
