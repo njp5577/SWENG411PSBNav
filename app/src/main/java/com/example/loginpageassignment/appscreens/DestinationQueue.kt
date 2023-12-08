@@ -90,7 +90,7 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
                     if (document.getString("user") == getLoggedInAsFun().username)
                     {
                         val list = mutableListOf<Location>()
-                        val rawList = document["list"] as ArrayList<HashMap<String, Any>>?
+                        val rawList = document["list"] as ArrayList<Map<String, Any>>?
 
                         rawList?.forEach { locationMap ->
                             val name = locationMap["name"] as String
@@ -129,30 +129,44 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
     {
         private var destQueueList = mutableListOf<Location>()
         private val queueManager = QueueManager.getQueueManager(username, context)
+
         @SuppressLint("NotifyDataSetChanged")
-        fun setData(data: MutableList<Location>)
-        {
+        fun setData(data: MutableList<Location>) {
             destQueueList.clear()
             destQueueList.addAll(data)
             notifyDataSetChanged()
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-        {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(
                 R.layout.dest_queue_item,
                 parent,
-                false)
+                false
+            )
             return ViewHolder(view)
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int)
-        {
-            if (destQueueList.isNotEmpty())
-            {
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            if (destQueueList.isNotEmpty()) {
                 val destinationCard = holder.itemView.findViewById<CardView>(R.id.destCard)
                 val destData = getItem(position, destQueueList)
+                val refreshCallback: () -> Unit = {
+                    (holder.itemView.context as DestinationQueue).refresh()
+                }
+
                 if (queueManager != null) holder.bind(destData, destinationCard, queueManager)
+
+                holder.itemView.findViewById<Button>(R.id.upButton).setOnClickListener {
+                    queueManager?.reorderQueue(-1, destData)
+                    sleep(250)
+                    refreshCallback.invoke()
+                }
+
+                holder.itemView.findViewById<Button>(R.id.downButton).setOnClickListener {
+                    queueManager?.reorderQueue(1, destData)
+                    sleep(250)
+                    refreshCallback.invoke()
+                }
             }
         }
 
@@ -168,31 +182,19 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
         class ViewHolder(itemView: View) :
             RecyclerView.ViewHolder(itemView)
         {
-            private val refreshCallback: () -> Unit = {
-                (itemView.context as DestinationQueue).refresh()
-            }
+            private val refreshCallback: () -> Unit = { (itemView.context as DestinationQueue).refresh() }
 
             // Bind data to views in the ViewHolder
-            fun bind(destData: Location, destCard : CardView, queueManager: QueueManager)
+            fun bind(destData: Location, destCard: CardView, queueManager: QueueManager)
             {
                 destCard.findViewById<TextView>(R.id.nameTextView).text = destData.name
 
                 destCard.findViewById<Button>(R.id.removeButton).setOnClickListener {
                     //grab location from card and pass to function
                     queueManager.removeFromQueue(destData)
-                    sleep(500)
+                    sleep(250)
                     refreshCallback.invoke() // call refresh after removing an item
                 }
-//
-//                destCard.findViewById<Button>(R.id.upButton).setOnClickListener {
-//                    //get position of item in queue
-//                    //queueManager.reorderQueue(1, position)
-//                }
-//
-//                destCard.findViewById<Button>(R.id.downButton).setOnClickListener {
-//                    //get position of item within queue
-//                    //queueManager.reorderQueue(-1, position)
-//                }
             }
         }
     }
