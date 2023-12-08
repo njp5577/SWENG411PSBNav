@@ -5,11 +5,18 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.loginpageassignment.dataobjects.Location
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.QuerySnapshot
 
 //Singleton
 class QueueManager private constructor(private val username: String, private val context: Context)
 {
     private val queueRef = DatabaseManager.getDatabaseManager()?.getQueueRef()
+
+    fun getUserQueue(): Task<QuerySnapshot>?
+    {
+        return queueRef?.whereEqualTo("user", username)?.get()
+    }
 
     // Add a location to the user's queue
     fun addToQueue(location: Location?)
@@ -126,10 +133,44 @@ class QueueManager private constructor(private val username: String, private val
     }
 
     // Shift the position of a location in the user's queue (+1/-1)
-    fun reorderQueue(shift: Int, position: Int): Boolean
+    fun reorderQueue(shift: Int, location: Location)
     {
-        //TODO: Write function
-        return false
+        queueRef?.whereEqualTo("user", username)?.get()?.addOnSuccessListener { documents ->
+            for (document in documents)
+            {
+                val existingLocations = document["list"]
+                if (isValidLocationList(existingLocations))
+                {
+                    val locationList = existingLocations as MutableList<Map<String, Any>>
+                    val position = locationList.indexOfFirst { it["name"] == location.name }
+                    if(checkShiftBounds(shift, position, locationList.size))
+                    {
+                        //swap positions
+                        val tempLocation = locationList[position]
+                        locationList[position] = locationList[position + shift]
+                        locationList[position + shift] = tempLocation
+
+                        //update queue
+                        updateQueue(document.id, locationList)
+
+                        // Refresh the user queue to ensure data consistency
+                        queueRef.whereEqualTo("user", username).get().addOnSuccessListener {
+                            Log.d("QueueManager", "User queue refreshed after reordering")
+                        }.addOnFailureListener {
+                            Log.e("QueueManager", "Failed to refresh user queue: $it")
+                        }
+                    }
+                    else showToast("Cannot be moved any more in that direction")
+                }
+            }
+        }?.addOnFailureListener{
+            Log.d("QueueManager", "Failed to retrieve user queue: $it")
+        }
+    }
+
+    private fun checkShiftBounds(shift: Int, position: Int, size: Int): Boolean
+    {
+        return !(position + shift < 0 || position + shift == size)
     }
 
     // Companion object for creating a singleton instance of QueueManager
