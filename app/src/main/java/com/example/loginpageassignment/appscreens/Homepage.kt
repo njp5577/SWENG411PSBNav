@@ -10,7 +10,7 @@ import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-
+//controller for the home page
 class Homepage() : LoggedInPageUser()
 {
     private lateinit var buttonMapPage: Button
@@ -21,18 +21,7 @@ class Homepage() : LoggedInPageUser()
     // Reference to the "Users" collection in Firestore
     private val userRef = DatabaseManager.getDatabaseManager()?.getUserRef()
 
-    private fun getButtonMapPageFun() : Button { return this.buttonMapPage }
-
-    private fun setButtonMapPageFun(buttonMapPage: Button){ this.buttonMapPage = buttonMapPage }
-
-    private fun getButtonDestinationQueueFun() : Button { return this.buttonDestinationQueue }
-
-    private fun setButtonDestinationQueueFun(buttonDestinationQueue: Button){ this.buttonDestinationQueue = buttonDestinationQueue }
-
-    private fun getButtonEventPageFun() : Button { return this.buttonEventPage }
-
-    private fun setButtonEventPageFun(buttonEventPage: Button){ this.buttonEventPage = buttonEventPage }
-
+    //refreshes the current page
     override fun refresh()
     {
         val go = Intent(this, Homepage::class.java)
@@ -41,37 +30,41 @@ class Homepage() : LoggedInPageUser()
         startActivity(go)
     }
 
+    //on activity create
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        setButtonMapPageFun(findViewById(R.id.buttonMapPage))
-        setButtonDestinationQueueFun(findViewById(R.id.buttonDestinationQueue))
-        setButtonEventPageFun(findViewById(R.id.buttonEventPage))
+        //initialize vars for buttons
+        buttonMapPage = findViewById(R.id.buttonMapPage)
+        buttonDestinationQueue = findViewById(R.id.buttonDestinationQueue)
+        buttonEventPage = findViewById(R.id.buttonEventPage)
         buttonManageEvents = findViewById(R.id.buttonManageEvents)
 
+        //set logged in user
         val userLogin = intent.getStringExtra("User")
         val user = Json.decodeFromString<CurrentUser>(userLogin.toString())
         setLoggedInAsFun(user)
 
         showToast("Hello ${getLoggedInAsFun().username}!", this)
 
-        getButtonMapPageFun().setOnClickListener {
+        //set listeners
+        buttonMapPage.setOnClickListener {
             val go = Intent(this, MapPage::class.java)
             val json = Json.encodeToString(getLoggedInAsFun())
             go.putExtra("User", json)
             startActivity(go)
         }
 
-        getButtonDestinationQueueFun().setOnClickListener {
+        buttonDestinationQueue.setOnClickListener {
             val go = Intent(this, DestinationQueue::class.java)
             val json = Json.encodeToString(getLoggedInAsFun())
             go.putExtra("User", json)
             startActivity(go)
         }
 
-        getButtonEventPageFun().setOnClickListener {
+        buttonEventPage.setOnClickListener {
             val go = Intent(this, EventPage::class.java)
             val json = Json.encodeToString(getLoggedInAsFun())
             go.putExtra("User", json)

@@ -11,19 +11,13 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.mindrot.jbcrypt.BCrypt
 
+//controller for the sign in page
 class SignIn : LoggedOutPage()
 {
     private lateinit var buttonSignUp: Button
     private lateinit var buttonReset: Button
 
-    private fun getButtonResetFun(): Button{ return this.buttonReset }
-
-    private fun setButtonResetFun(buttonReset: Button){ this.buttonReset = buttonReset }
-
-    private fun getButtonSignUpFun(): Button{ return this.buttonSignUp }
-
-    private fun setButtonSignUpFun(buttonSignUp: Button){ this.buttonSignUp = buttonSignUp }
-
+    //controls which type of user views which home page
     private fun navigateToHomePage(userType: String, username: String)
     {
         val go: Intent = when (userType)
@@ -38,8 +32,10 @@ class SignIn : LoggedOutPage()
         startActivity(go)
     }
 
+    //refreshes current page
     override fun refresh() { startActivity(Intent(this, SignIn::class.java)) }
 
+    //on activity create
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -51,18 +47,18 @@ class SignIn : LoggedOutPage()
         setEditTextUsernameFun(findViewById(R.id.editTextUsername))
         setEditTextPasswordFun(findViewById(R.id.editTextPassword))
         setButtonLoginFun(findViewById(R.id.buttonLogin))
-        setButtonSignUpFun(findViewById(R.id.buttonSignUp))
-        setButtonResetFun(findViewById(R.id.buttonForgot))
+        buttonSignUp = findViewById(R.id.buttonSignUp)
+        buttonReset = findViewById(R.id.buttonForgot)
 
         val userRef = DatabaseManager.getDatabaseManager()?.getUserRef()
 
         //When user wants to reset password
-        getButtonResetFun().setOnClickListener {
+        buttonReset.setOnClickListener {
             startActivity(Intent(this, ResetPassword::class.java))
         }
 
         //When user wants to sign up
-        getButtonSignUpFun().setOnClickListener {
+        buttonSignUp.setOnClickListener {
             startActivity(Intent(this, SignUp::class.java))
         }
 
@@ -74,14 +70,13 @@ class SignIn : LoggedOutPage()
 
             userRef?.whereEqualTo("username", username)?.get()
                 ?.addOnSuccessListener{ documents ->
-                val hashed = documents.documents[0].getString("password")
-                if((documents.isEmpty || !BCrypt.checkpw(password, hashed))) //Check that account exists
-                {
-                    showToast("Invalid username or password.", this)
-                } else //if account exists, verify password
-                {
-                    navigateToHomePage(documents.documents[0].getString("type")!!, username)
-                }
+                    val hashed = documents.documents[0].getString("password")
+
+                    //Check that account exists and validate the password
+                    if((documents.isEmpty || !BCrypt.checkpw(password, hashed)))
+                        showToast("Invalid username or password.", this)
+                    else //if account exists, verify password
+                        navigateToHomePage(documents.documents[0].getString("type")!!, username)
             }
         }
     }
