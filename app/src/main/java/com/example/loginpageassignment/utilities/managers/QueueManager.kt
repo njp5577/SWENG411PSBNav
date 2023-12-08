@@ -5,36 +5,33 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.loginpageassignment.dataobjects.Location
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.QuerySnapshot
 
 //Singleton
 class QueueManager private constructor(private val username: String, private val context: Context)
 {
     private val queueRef = DatabaseManager.getDatabaseManager()?.getQueueRef()
 
-    fun getUserQueue(): Task<QuerySnapshot>?
-    {
-        return queueRef?.whereEqualTo("user", username)?.get()
-    }
-
     // Add a location to the user's queue
     fun addToQueue(location: Location?)
     {
-        if (location == null) return
+        if (location == null) return  //early return for invalid location
 
         queueRef?.whereEqualTo("user", username)?.get()?.addOnSuccessListener { documents ->
-            for (document in documents) {
+            for (document in documents)
+            {
                 val existingLocations = document["list"]
 
                 // Check if locations are not null and of the expected type
-                if (isValidLocationList(existingLocations)) {
+                if (isValidLocationList(existingLocations))
+                {
                     val locationList = existingLocations as MutableList<Map<String, Any>>
 
                     // Check if the location already exists in the list
-                    if (locationAlreadyExists(location, locationList)) {
+                    if (locationAlreadyExists(location, locationList))
+                    {
                         showToast("Location already exists within queue")
-                    } else // Add new location
+                    }
+                    else // Add new location
                     {
                         addNewLocation(location, locationList)
                         showToast("${location.name} added to queue")
@@ -85,29 +82,45 @@ class QueueManager private constructor(private val username: String, private val
     }
 
     // Show a short toast message
-    private fun showToast(message: String) { Toast.makeText(context, message, Toast.LENGTH_SHORT).show() }
+    private fun showToast(message: String)
+    {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
 
     // Remove a location from the user's queue
     fun removeFromQueue(location: Location?)
     {
-        if (location == null) return
+        if (location == null) return  //early return for invalid location
 
         queueRef?.whereEqualTo("user", username)?.get()?.addOnSuccessListener { documents ->
-            for (document in documents) {
+            for (document in documents)
+            {
                 val existingLocations = document["list"]
 
-                if (isValidLocationList(existingLocations)) {
+                if (isValidLocationList(existingLocations))
+                {
                     val locationList = existingLocations as MutableList<Map<String, Any>>
                     val locationRemoved = removeLocation(location, locationList)
                     updateQueue(document.id, existingLocations)
 
-                    if (locationRemoved) {
+                    if (locationRemoved)
+                    {
                         Log.d("Queue", "Location removed from the queue")
                         showToast("${location.name} removed from queue")
-                    } else Log.d("Queue", "Location not found in the queue")
+                    }
+                    else Log.d("Queue", "Location not found in the queue")
                 }
             }
         }
+    }
+
+    // Check if a location matches the given properties
+    private fun existingMatches(location: Location, existingLocation: Map<String, Any>): Boolean
+    {
+        return existingLocation["name"] == location.name &&
+                existingLocation["desc"] == location.desc &&
+                existingLocation["latitude"] == location.latitude &&
+                existingLocation["longitude"] == location.longitude
     }
 
     // Remove a location from the list
@@ -120,10 +133,7 @@ class QueueManager private constructor(private val username: String, private val
             val existingLocation = iterator.next()
 
             // Compare the location properties for equality
-            if (existingLocation["name"] == location.name &&
-                existingLocation["desc"] == location.desc &&
-                existingLocation["latitude"] == location.latitude &&
-                existingLocation["longitude"] == location.longitude)
+            if (existingMatches(location, existingLocation))
             {
                 iterator.remove()
                 return true
@@ -143,6 +153,7 @@ class QueueManager private constructor(private val username: String, private val
                 {
                     val locationList = existingLocations as MutableList<Map<String, Any>>
                     val position = locationList.indexOfFirst { it["name"] == location.name }
+
                     if(checkShiftBounds(shift, position, locationList.size))
                     {
                         //swap positions
@@ -154,11 +165,7 @@ class QueueManager private constructor(private val username: String, private val
                         updateQueue(document.id, locationList)
 
                         // Refresh the user queue to ensure data consistency
-                        queueRef.whereEqualTo("user", username).get().addOnSuccessListener {
-                            Log.d("QueueManager", "User queue refreshed after reordering")
-                        }.addOnFailureListener {
-                            Log.e("QueueManager", "Failed to refresh user queue: $it")
-                        }
+                        refreshQueue()
                     }
                     else showToast("Cannot be moved any more in that direction")
                 }
@@ -171,6 +178,15 @@ class QueueManager private constructor(private val username: String, private val
     private fun checkShiftBounds(shift: Int, position: Int, size: Int): Boolean
     {
         return !(position + shift < 0 || position + shift == size)
+    }
+
+    private fun refreshQueue()
+    {
+        queueRef?.whereEqualTo("user", username)?.get()?.addOnSuccessListener {
+            Log.d("QueueManager", "User queue refreshed after reordering")
+        }?.addOnFailureListener {
+            Log.e("QueueManager", "Failed to refresh user queue: $it")
+        }
     }
 
     // Companion object for creating a singleton instance of QueueManager
