@@ -2,9 +2,7 @@
 package com.example.loginpageassignment.dataobjects;
 import com.google.firebase.firestore.PropertyName;
 
-/**
- * Holds data for a single Penn State Behrend event
- */
+//Holds data for a single Penn State Behrend event
 public class PSB_Event
 {
     @PropertyName("Name")

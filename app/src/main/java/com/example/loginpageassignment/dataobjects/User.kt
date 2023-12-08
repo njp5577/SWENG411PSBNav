@@ -2,7 +2,7 @@ package com.example.loginpageassignment.dataobjects
 
 import kotlinx.serialization.Serializable
 
-//Object for user information
+//Object for user information that matches the entry in the database
 @Serializable
 data class User (
     var name: String,
