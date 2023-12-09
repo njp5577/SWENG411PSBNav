@@ -21,6 +21,13 @@
             android:orientation="vertical"
             android:padding="16dp">
             <TextView
+                android:id="@+id/eventCreatorTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Creator:"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+            <TextView
                 android:id="@+id/nameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -75,7 +75,7 @@ class DestinationQueue : LoggedInPage(), AddToQueuePopup.PopupDismissCallback
         addToQueueButton = findViewById(R.id.addToQueueButton)
         addToQueueButton.setOnClickListener {
             //open popup
-            addToQueuePopup.showDetails(PSB_Event(), getLoggedInAsFun())
+            addToQueuePopup.showDetails(PSB_Event(getLoggedInAsFun().username), getLoggedInAsFun())
         }
 
         //retreive queue for display

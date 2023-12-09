@@ -5,6 +5,8 @@ import com.google.firebase.firestore.PropertyName;
 //Holds data for a single Penn State Behrend event
 public class PSB_Event
 {
+    @PropertyName("Event Creator")
+    private String eventCreator;
     @PropertyName("Name")
     private String eventName;
 
@@ -20,9 +22,9 @@ public class PSB_Event
     @PropertyName("Description")
     private String eventDescription;
 
-    @SuppressWarnings("unused")
     public PSB_Event()
     {
+        eventCreator = "Sample Event Creator";
         eventName = "Sample Event Name";
         eventLocation= "Sample Event Location";
         eventTime = "Sample Event Time";
@@ -31,8 +33,20 @@ public class PSB_Event
     }
 
     @SuppressWarnings("unused")
-    public PSB_Event(String n, String l, String t, String da, String de)
+    public PSB_Event(String ec)
     {
+        eventCreator = ec;
+        eventName = "Sample Event Name";
+        eventLocation= "Sample Event Location";
+        eventTime = "Sample Event Time";
+        eventDate = "Sample Event Date";
+        eventDescription = "Sample Event Description";
+    }
+
+    @SuppressWarnings("unused")
+    public PSB_Event(String ec, String n, String l, String t, String da, String de)
+    {
+        eventCreator = ec;
         eventName = n;
         eventLocation = l;
         eventTime = t;
@@ -40,6 +54,18 @@ public class PSB_Event
         eventDescription = de;
     }
 
+    @PropertyName("Event Creator")
+    public String getEventCreator()
+    {
+        return this.eventCreator;
+    }
+
+    @SuppressWarnings("unused") //remove when used
+    @PropertyName("Event Creator")
+    public void setEventCreator(String eventCreator)
+    {
+        this.eventCreator = eventCreator;
+    }
     @PropertyName("Name")
     public String getEventName()
     {

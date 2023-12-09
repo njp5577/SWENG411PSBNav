@@ -109,6 +109,7 @@ class EventPage : LoggedInPage()
     private fun bindEventData(eventCard: CardView, event: PSB_Event)
     {
         // Bind event data to the card view
+        eventCard.findViewById<TextView>(R.id.eventCreatorTextView).text = event.eventCreator
         eventCard.findViewById<TextView>(R.id.dateTextView).text = event.eventDate
         eventCard.findViewById<TextView>(R.id.locationTextView).text = event.eventLocation
         eventCard.findViewById<TextView>(R.id.nameTextView).text = event.eventName

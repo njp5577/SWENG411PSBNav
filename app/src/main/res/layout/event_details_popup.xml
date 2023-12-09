@@ -12,13 +12,22 @@
         android:contentDescription="@string/event_image" />
 
     <TextView
-        android:id="@+id/popupEventName"
+        android:id="@+id/popupEventCreator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_below="@id/popupEventImage"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/popupEventName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_below="@id/popupEventCreator"
         android:layout_marginBottom="8dp"/>
 
     <TextView

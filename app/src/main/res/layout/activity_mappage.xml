@@ -24,16 +24,21 @@
 
     <Button
         android:id="@+id/buttonNext"
-        android:layout_width="300px"
+        android:layout_width="350px"
         android:layout_height="wrap_content"
         android:layout_below="@id/landingText"
         android:gravity="center"
         android:layout_marginTop="20dp"
         android:text="Next" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
         <Button
             android:id="@+id/buttonPrev"
-            android:layout_width="300px"
+            android:layout_width="350px"
             android:layout_height="wrap_content"
             android:layout_below="@id/landingText"
             android:layout_marginTop="20dp"
