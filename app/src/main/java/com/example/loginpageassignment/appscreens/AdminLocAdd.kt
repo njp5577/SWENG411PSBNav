@@ -107,6 +107,7 @@ class AdminLocAdd : LoggedInPageAdmin()
                     locRef.add(Location(iname, lat, long, idesc)).addOnSuccessListener {
                         val message = "Location added at $lat, $long"
                         showToast(message, this)
+                        refresh()
                     }
                 }
 

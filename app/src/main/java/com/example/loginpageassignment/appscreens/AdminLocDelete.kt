@@ -65,6 +65,7 @@ class AdminLocDelete: LoggedInPageAdmin()
     {
         documents.documents[0].reference.delete().addOnSuccessListener {
             showToast("The location under this name has been deleted.", this)
+            refresh()
         }
     }
 }
