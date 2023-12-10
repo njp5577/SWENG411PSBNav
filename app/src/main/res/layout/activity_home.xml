@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal= "true"
         android:gravity="center"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="70dp"
         android:text="@string/landingText"
         app:srcCompat="@mipmap/ic_launcher_round"/>
 
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonMapPage"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="Destination Queue" />
 
     <Button
@@ -40,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonDestinationQueue"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="Event Page" />
 
     <Button
@@ -49,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonEventPage"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="Manage Events" />
 
 
