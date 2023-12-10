@@ -1,5 +1,8 @@
 # PSB Navigator
 
+This app is implmented with Kotlin and Java for the Android operating system.
+The required libraries are handled by the gradle build file.
+
 To run the app, an android emulator is required.
 Download Android Studio here: https://developer.android.com/studio
 
