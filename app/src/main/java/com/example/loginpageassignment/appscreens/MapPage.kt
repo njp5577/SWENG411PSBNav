@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.loginpageassignment.R
 import com.example.loginpageassignment.dataobjects.CurrentUser
 import com.example.loginpageassignment.dataobjects.Location
-import com.example.loginpageassignment.parentpageclasses.LoggedInPageAdmin
+import com.example.loginpageassignment.parentpageclasses.LoggedInPage
 import com.example.loginpageassignment.utilities.managers.DatabaseManager
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -26,7 +26,7 @@ import kotlinx.serialization.json.Json
 import java.util.Timer
 import kotlin.concurrent.schedule
 
-class MapPage : LoggedInPageAdmin()
+class MapPage : LoggedInPage()
 {
     private lateinit var googleMapWebView: WebView
     private lateinit var buttonNext: Button
