@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.loginpageassignment"
+    namespace = "com.example.psbnavigator"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.loginpageassignment"
+        applicationId = "com.example.psbnavigator"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

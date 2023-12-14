@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".appscreens.DestinationQueue">
+    tools:context=".controller.appscreens.DestinationQueue">
 
     <TextView
         android:id="@+id/landingText"
@@ -20,7 +20,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/destQueueRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="568dp"
+        android:layout_height="500dp"
         android:layout_below="@id/landingText"
         android:layout_marginTop="15dp"
         android:background="@android:color/transparent"
@@ -32,7 +32,6 @@
         android:layout_width="400dp"
         android:layout_height="78dp"
         android:layout_below="@id/destQueueRecyclerView"
-        android:layout_alignParentBottom="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="10dp"

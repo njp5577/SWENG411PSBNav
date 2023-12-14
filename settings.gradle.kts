@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LoginPageAssignment"
+rootProject.name = "psbnavigator"
 include(":app")
  

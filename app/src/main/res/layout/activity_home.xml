@@ -53,5 +53,14 @@
         android:layout_marginTop="40dp"
         android:text="Manage Events" />
 
+    <Button
+        android:id="@+id/buttonLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonDeleteAccount"
+        android:gravity="center"
+        android:layout_marginTop="40dp"
+        android:text="Sign Out" />
+
 
 </LinearLayout>
